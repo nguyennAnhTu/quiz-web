@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: movie-theater
+  profiles:
+    active: ${PROFILE_ACTIVE:dev-local}
+  liquibase:
+    change-log: classpath:db/master.xml
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6378}
+
+
+server:
+  port: ${PORT_INTERNAL:8888}
+
+logging:
+  level:
+    sql: debug
+
+jwt:
+  access-token:
+    secret-key: b3NpbnRfYXBpX2F1dGhvcml6YXRpb25AMjAyM19hY2Nlc3NfdG9rZW4=
+    ttl: 2592000000
+  refresh-token:
+    secret-key: b3NpbnRfYXBpX2F1dGhvcml6YXRpb25AMjAyM19yZWZyZXNoX3Rva2Vu
+    ttl: 2592000000
+
+
+
