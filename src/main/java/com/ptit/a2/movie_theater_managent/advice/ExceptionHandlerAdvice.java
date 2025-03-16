@@ -79,7 +79,7 @@ public class ExceptionHandlerAdvice {
           .body(getError(HttpStatus.BAD_REQUEST.value(), errorMessage, language));
   }
 
-  private ResponseGeneral<com.ptit.a2.movie_theater_managent.dto.Error> getError(int status, String code, String language) {
+  private ResponseGeneral<Error> getError(int status, String code, String language) {
     return ResponseGeneral.of(
           status,
           HttpStatus.valueOf(status).getReasonPhrase(),

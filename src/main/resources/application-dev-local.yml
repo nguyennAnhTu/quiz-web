@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: hieu112004
-    url: jdbc:postgresql://localhost:5432/dh
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/movie-theater-management
 
   data:
     redis:
