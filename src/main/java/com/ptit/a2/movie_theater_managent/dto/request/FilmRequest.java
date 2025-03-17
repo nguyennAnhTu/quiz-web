@@ -15,6 +15,8 @@ import java.util.List;
 public class FilmRequest {
   private String name;
 
+  private String description;
+
   private Integer duration;
 
   private Integer ageLimit;

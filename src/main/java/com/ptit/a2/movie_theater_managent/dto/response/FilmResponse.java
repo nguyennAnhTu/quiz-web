@@ -22,4 +22,8 @@ public class FilmResponse {
   private Date releaseDate;
   private List<String> genres;
   private String trailerUrl;
+
+  public static FilmResponse of(Integer id, String name, String description, Integer duration, Integer ageLimit, Date releaseDate, String trailerUrl) {
+    return of(id, name, description, duration, ageLimit, releaseDate, null, trailerUrl);
+  }
 }
