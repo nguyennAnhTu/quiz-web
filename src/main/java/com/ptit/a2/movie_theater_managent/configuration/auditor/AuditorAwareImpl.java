@@ -1,7 +1,6 @@
 package com.ptit.a2.movie_theater_managent.configuration.auditor;
 
 
-
 import com.ptit.a2.movie_theater_managent.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;
@@ -27,7 +26,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
     if (Objects.nonNull(authentication) && !this.isAnonymous() && (Objects.nonNull(authentication.getPrincipal()))) {
       User user = (User) authentication.getPrincipal();
-      return Optional.of(user.getUsername());
+      return Optional.of(user.getEmail());
 
 
     }

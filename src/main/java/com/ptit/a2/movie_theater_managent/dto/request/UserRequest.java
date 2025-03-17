@@ -1,8 +1,7 @@
-package com.ptit.a2.movie_theater_managent.entity;
+package com.ptit.a2.movie_theater_managent.dto.request;
 
-import com.ptit.a2.movie_theater_managent.entity.base.AuditEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
-@Table(name = "users")
-public class User extends AuditEntity {
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class UserRequest {
   private String email;
   private String password;
   private String name;
