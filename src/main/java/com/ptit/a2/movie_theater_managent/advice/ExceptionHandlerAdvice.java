@@ -1,24 +1,22 @@
 package com.ptit.a2.movie_theater_managent.advice;
 
 
-
+import com.ptit.a2.movie_theater_managent.dto.Error;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
-import com.ptit.a2.movie_theater_managent.exception.base.BaseException;
+import com.ptit.a2.movie_theater_managent.exception.newbase.BaseException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import com.ptit.a2.movie_theater_managent.dto.Error;
+import java.util.*;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.*;
 
@@ -29,34 +27,37 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 public class ExceptionHandlerAdvice {
   private final MessageSource messageSource;
 
-  @ExceptionHandler(value = {BaseException.class})
-  public ResponseEntity<ResponseGeneral<Error>> handleFinanceBaseException(
-        BaseException ex,
-        WebRequest webRequest
-  ) {
+  @ExceptionHandler(BaseException.class)
+  public ResponseEntity<ResponseGeneral<Error>> handleBaseException(BaseException exception) {
     return ResponseEntity
-          .status(ex.getStatus())
-          .body(getError(ex.getStatus(), ex.getCode(), webRequest.getLocale(), ex.getParams()));
+          .status(exception.getStatus())
+          .body(this.getError(
+                exception.getStatus(),
+                exception.getMessage(),
+                exception.getDetails()
+          ));
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ResponseGeneral<Error>> handleValidationExceptions(
-        MethodArgumentNotValidException exception,
-        WebRequest webRequest
+        MethodArgumentNotValidException exception
   ) {
-    log.error("(handleValidationExceptions)exception: {}", exception.getMessage());
-    String language = Objects.nonNull(webRequest.getHeader(LANGUAGE)) ?
-          webRequest.getHeader(LANGUAGE) : DEFAULT_LANGUAGE;
+    List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+    Map<String, String> errors = new HashMap<>();
 
-    String errorMessage = exception.getBindingResult().getFieldErrors().stream()
-          .map(fieldError -> fieldError.getDefaultMessage())
-          .findFirst()
-          .orElse(exception.getMessage());
+    for (FieldError fieldError : fieldErrors) {
+      errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+    }
 
-    log.error("(handleValidationExceptions) {}", errorMessage);
     return ResponseEntity
           .status(HttpStatus.BAD_REQUEST)
-          .body(getError(HttpStatus.BAD_REQUEST.value(), errorMessage, language));
+          .body(ResponseGeneral.of(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST_MESSAGE, new Error(errors)));
+  }
+
+  private ResponseGeneral<Error> getError(int status, String message, String detail) {
+    return ResponseGeneral.of(
+          status, message, new Error(detail)
+    );
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
@@ -77,14 +78,6 @@ public class ExceptionHandlerAdvice {
     return ResponseEntity
           .status(HttpStatus.BAD_REQUEST)
           .body(getError(HttpStatus.BAD_REQUEST.value(), errorMessage, language));
-  }
-
-  private ResponseGeneral<Error> getError(int status, String code, String language) {
-    return ResponseGeneral.of(
-          status,
-          HttpStatus.valueOf(status).getReasonPhrase(),
-          Error.of(code, getMessage(code, new Locale(language)))
-    );
   }
 
   private ResponseGeneral<Error> getError(int status, String code, Map<String, String> params) {

@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 public class Error {
   private String code;
   private Object detail;
+
+  public Error(Object detail) {
+    this.detail = detail;
+  }
 }

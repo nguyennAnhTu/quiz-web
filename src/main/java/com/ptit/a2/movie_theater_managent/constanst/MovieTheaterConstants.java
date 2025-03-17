@@ -28,6 +28,7 @@ public class MovieTheaterConstants {
     public static final String UNKNOWN = "Unknown";
     public static final Integer UNKNOWN_BANK_ID = 15;
     public static final Integer UNKNOWN_PROVIDER_ID = 7;
+    public static final String EMAIL_ALREADY_EXISTED= "email already existed";
   }
 
 
