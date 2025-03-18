@@ -6,6 +6,7 @@ import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundException;
 import com.ptit.a2.movie_theater_managent.repository.UserRepository;
 import com.ptit.a2.movie_theater_managent.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,14 @@ public class UserServiceImpl implements UserService {
           user.getPhoneNumber(),
           user.getIsAdmin()
     );
+  }
+
+  @Override
+  public User findByEmail(String email) {
+    log.info("(findByEmail) request: {}", email);
+
+    return repository.findByEmail(email)
+          .orElseThrow(UserNotFoundException::new);
   }
 
   private User toEntity(UserRequest request) {
