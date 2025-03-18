@@ -46,4 +46,13 @@ public class AuthenticateController {
           authenticateFacadeService.login(request)
     );
   }
+
+  @PostMapping("/logout")
+  public ResponseGeneral<Void> logout() {
+    log.info("===Start logout");
+
+    authenticateFacadeService.logout();
+
+    return ResponseGeneral.ofSuccess(SUCCESS);
+  }
 }

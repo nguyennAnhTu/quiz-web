@@ -23,6 +23,7 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.AuthConstant.CLAIM_EMAIL_KEY;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.ACCESS_TOKEN_KEY;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.REFRESH_TOKEN_KEY;
+import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
 import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getDefaultAuthorities;
 import static com.ptit.a2.movie_theater_managent.utils.PasswordEncoderUtils.getPasswordEncoder;
 
@@ -70,6 +71,15 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
     );
   }
 
+  @Override
+  public void logout() {
+    log.info("===start logout");
+
+    tokenRedisService.remove(
+          getCurrentUserId().toString()
+    );
+  }
+
   private void equalPassword(String passwordRaw, String passwordEncrypted) {
     if (!getPasswordEncoder().matches(passwordRaw, passwordEncrypted)) {
       throw new PasswordIncorrectException();
@@ -82,7 +92,7 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
     claims.put(CLAIM_EMAIL_KEY, user.getEmail());
 
     if (tokenType == TokenType.ACCESS_TOKEN) {
-      claims.put(CLAIM_AUTHORITIES_KEY, getDefaultAuthorities(user.getIsAdmin()));
+      claims.put(CLAIM_AUTHORITIES_KEY, user.getIsAdmin());
     }
 
     return claims;

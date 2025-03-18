@@ -18,7 +18,7 @@ public class TokenRedisServiceImpl extends BaseRedisServiceImpl implements Token
 
   @Override
   public void remove(String userId) {
-    log.info("(remove)accountId: {}", userId);
+    log.info("(remove)userId: {}", userId);
 
     this.delete(REFRESH_TOKEN_KEY, userId);
     this.delete(ACCESS_TOKEN_KEY, userId);

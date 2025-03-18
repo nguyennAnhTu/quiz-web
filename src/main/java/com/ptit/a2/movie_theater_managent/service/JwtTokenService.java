@@ -1,6 +1,7 @@
 package com.ptit.a2.movie_theater_managent.service;
 
 import com.ptit.a2.movie_theater_managent.constanst.enums.TokenType;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 import java.util.Map;
@@ -12,5 +13,5 @@ public interface JwtTokenService {
 
   Object getCredentialsFromToken(String token);
 
-  List<String> getAuthoritiesFromToken(String token);
+  boolean getAuthoritiesFromToken(String token);
 }
