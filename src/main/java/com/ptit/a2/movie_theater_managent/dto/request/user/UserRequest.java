@@ -1,4 +1,4 @@
-package com.ptit.a2.movie_theater_managent.dto.request;
+package com.ptit.a2.movie_theater_managent.dto.request.user;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
