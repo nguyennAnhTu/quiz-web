@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -65,14 +67,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//
         return;
       }
 
-      List<String> authorities = jwtTokenService.getAuthoritiesFromToken(accessToken);
-      boolean isAdmin = authorities.contains("ROLE_ADMIN");
+      boolean isAdmin = jwtTokenService.getAuthoritiesFromToken(accessToken);
+
+      List<GrantedAuthority> authorities = isAdmin
+            ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
+            : List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
       Authentication authentication = new UsernamePasswordAuthenticationToken(
             userId,
             email,
-            getDefaultAuthorities(isAdmin)
+            authorities
       );
+
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
       filterChain.doFilter(request, response);

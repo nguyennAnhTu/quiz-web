@@ -60,12 +60,26 @@ public class JwtTokenServiceImpl implements JwtTokenService {
   }
 
   @Override
-  public List getAuthoritiesFromToken(String token) {
+  public boolean getAuthoritiesFromToken(String token) {
     log.debug("(getAuthoritiesFromToken) start");
 
     this.validateToken(token);
 
-    return this.getClaims(token).get(CLAIM_AUTHORITIES_KEY, List.class);
+    Claims claims = this.getClaims(token);
+    log.info("{}", claims);
+
+    Object isAdminObj = claims.get(CLAIM_AUTHORITIES_KEY);
+
+    boolean isAdmin = false;
+    if (isAdminObj instanceof Boolean) {
+      isAdmin = (Boolean) isAdminObj;
+    } else if (isAdminObj instanceof String) {
+      isAdmin = Boolean.parseBoolean((String) isAdminObj);
+    } else if (isAdminObj instanceof Integer) {
+      isAdmin = ((Integer) isAdminObj) != 0;
+    }
+
+    return isAdmin;
   }
 
   private String generateToken(String subject, Map<String, Object> claims, long tokenLifeTime) {

@@ -9,4 +9,6 @@ public interface AuthenticateFacadeService {
   AuthRegisterResponse register(AuthRegisterRequest request);
 
   LoginResponse login(LoginRequest request);
+
+  void logout();
 }
