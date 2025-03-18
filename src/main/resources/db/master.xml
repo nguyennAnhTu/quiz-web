@@ -7,4 +7,5 @@
     <include file="db/20250315-1830-create-table-films.xml"/>
     <include file="db/20250316-0940-create-table-genres.xml"/>
     <include file="db/20250316-0945-create-table-film-genre.xml"/>
+    <include file="db/20250317-1000-create-table-users.xml"/>
 </databaseChangeLog>

@@ -19,12 +19,11 @@ logging:
     sql: debug
 
 jwt:
+  secret-key: b3NpbnRfYXBpX2F1dGhvcml6YXRpb25AMjAyM19hY2Nlc3NfdG9rZW4=
   access-token:
-    secret-key: b3NpbnRfYXBpX2F1dGhvcml6YXRpb25AMjAyM19hY2Nlc3NfdG9rZW4=
-    ttl: 2592000000
+    ttl: 864000000
   refresh-token:
-    secret-key: b3NpbnRfYXBpX2F1dGhvcml6YXRpb25AMjAyM19yZWZyZXNoX3Rva2Vu
-    ttl: 2592000000
+    ttl: 864000000
 
 
 

@@ -28,7 +28,7 @@ public @interface ValidationPassword {
 
   class PasswordValidator implements ConstraintValidator<ValidationPassword, String> {
 
-    private static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,32}$";
+    private static final String PASSWORD_PATTERN = "^.{5,}$";
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
