@@ -22,5 +22,6 @@ public class Film extends AuditEntity {
   private Integer duration;
   private Integer ageLimit;
   private Date releaseDate;
+  private String thumbnailUrl;
   private String trailerUrl;
 }

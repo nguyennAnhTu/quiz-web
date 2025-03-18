@@ -5,4 +5,6 @@ import com.ptit.a2.movie_theater_managent.dto.response.GenreResponse;
 
 public interface GenreService {
   GenreResponse create(GenreRequest request);
+
+  GenreResponse find(String name);
 }

@@ -3,6 +3,7 @@ package com.ptit.a2.movie_theater_managent.service.impl;
 import com.ptit.a2.movie_theater_managent.dto.request.GenreRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.GenreResponse;
 import com.ptit.a2.movie_theater_managent.entity.Genre;
+import com.ptit.a2.movie_theater_managent.exception.film.GenreNotFoundException;
 import com.ptit.a2.movie_theater_managent.repository.GenreRepository;
 import com.ptit.a2.movie_theater_managent.service.GenreService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,15 @@ public class GenreServiceImpl implements GenreService {
 
     final Genre genre = this.toEntity(request);
     return this.toDTO(repository.save(genre));
+  }
+
+  @Override
+  public GenreResponse find(String name) {
+    log.info("(find genre) name: {}", name);
+
+    Genre genre = repository.findByName(name).orElseThrow(GenreNotFoundException::new);
+
+    return this.toDTO(genre);
   }
 
   private Genre toEntity(GenreRequest request) {
