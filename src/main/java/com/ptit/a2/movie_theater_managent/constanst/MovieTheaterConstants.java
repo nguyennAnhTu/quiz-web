@@ -29,6 +29,9 @@ public class MovieTheaterConstants {
     public static final Integer UNKNOWN_BANK_ID = 15;
     public static final Integer UNKNOWN_PROVIDER_ID = 7;
     public static final String EMAIL_ALREADY_EXISTED= "email already existed";
+    public static final String USER_NOT_FOUND = "user not found";
+    public static final String INCORRECT_PASSWORD = "incorrect password";
+    public static final String EXPIRED_TOKEN = "expired token";
   }
 
 
@@ -69,6 +72,9 @@ public class MovieTheaterConstants {
     public static String[] MATCHER_USER_API = {"/api/v1/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**"
           , "/actuator/", "/api/v1/reports/**"};
     public static String[] MATCHER_ADMIN_API = {"/api/v1/admin/**"};
+    public static String CLAIMS = "claims";
+    public static final String CLAIM_EMAIL_KEY = "email";
+    public static final String CLAIM_AUTHORITIES_KEY = "authorities";
   }
 
 
@@ -94,4 +100,8 @@ public class MovieTheaterConstants {
     public static final String INACTIVE_ACCOUNT = "Account is Inactived";
   }
 
+  public static class RedisConstant {
+    public static final String REFRESH_TOKEN_KEY = "refresh_token";
+    public static final String ACCESS_TOKEN_KEY = "access_token";
+  }
 }

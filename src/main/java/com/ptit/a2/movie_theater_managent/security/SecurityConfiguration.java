@@ -1,5 +1,7 @@
 package com.ptit.a2.movie_theater_managent.security;
 
+import com.ptit.a2.movie_theater_managent.filter.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -21,23 +23,20 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-//  private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//  private final UnAuthenticationCustomHandler unAuthenticationCustomHandler;
-//  private final UnAuthorizationCustomHandler unAuthorizationCustomHandler;
-
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
   @Bean
   public SecurityFilterChain securityFilterChainUsersAPI(HttpSecurity httpSecurity) throws Exception {
     sharedSecurityConfiguration(httpSecurity);
     httpSecurity
-//          .securityMatcher(CMSConstants.AuthConstant.MATCHER_USER_API)
           .authorizeHttpRequests(auth -> {
             auth.requestMatchers(MATCHER_USER_API).permitAll();
             auth.anyRequest().authenticated();
-          });
-//          .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+          })
+          .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 //          .exceptionHandling(exception -> exception
 //                .authenticationEntryPoint(unAuthenticationCustomHandler)
 //                .accessDeniedHandler(unAuthorizationCustomHandler));

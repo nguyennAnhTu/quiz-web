@@ -2,7 +2,9 @@ package com.ptit.a2.movie_theater_managent.controller;
 
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.LoginRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.LoginResponse;
 import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,18 @@ public class AuthenticateController {
     return ResponseGeneral.ofCreated(
           SUCCESS,
           authenticateFacadeService.register(request)
+    );
+  }
+
+  @PostMapping("/login")
+  public ResponseGeneral<LoginResponse> login(
+        @RequestBody LoginRequest request
+  ) {
+    log.info("===Start login");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          authenticateFacadeService.login(request)
     );
   }
 }
