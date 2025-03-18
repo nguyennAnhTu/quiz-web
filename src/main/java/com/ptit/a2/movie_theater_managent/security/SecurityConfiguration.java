@@ -33,8 +33,8 @@ public class SecurityConfiguration {
     sharedSecurityConfiguration(httpSecurity);
     httpSecurity
           .authorizeHttpRequests(auth -> {
-            auth.requestMatchers(MATCHER_USER_API).permitAll();
             auth.requestMatchers(MATCHER_ADMIN_API).hasRole("ADMIN");
+            auth.requestMatchers(MATCHER_USER_API).permitAll();
             auth.anyRequest().authenticated();
           })
           .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -38,6 +38,7 @@ public class ExceptionHandlerAdvice {
           ));
   }
 
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ResponseGeneral<Error>> handleValidationExceptions(
         MethodArgumentNotValidException exception
