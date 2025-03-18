@@ -68,7 +68,10 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     Claims claims = this.getClaims(token);
     log.info("{}", claims);
 
-    Object isAdminObj = claims.get(CLAIM_AUTHORITIES_KEY);
+    Map<String, Object> claimsMap = (Map<String, Object>) claims.get("claims");
+    Object isAdminObj = claimsMap.get("authorities");
+    log.info("{}", isAdminObj);
+
 
     boolean isAdmin = false;
     if (isAdminObj instanceof Boolean) {
@@ -79,6 +82,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
       isAdmin = ((Integer) isAdminObj) != 0;
     }
 
+    log.info("(getAuthoritiesFromToken) isAdmin: {}", isAdmin);
     return isAdmin;
   }
 

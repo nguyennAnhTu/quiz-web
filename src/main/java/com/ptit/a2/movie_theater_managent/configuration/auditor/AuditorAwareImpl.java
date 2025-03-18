@@ -25,8 +25,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     log.info("Authentication: " + authentication);
 
     if (Objects.nonNull(authentication) && !this.isAnonymous() && (Objects.nonNull(authentication.getPrincipal()))) {
-      User user = (User) authentication.getPrincipal();
-      return Optional.of(user.getEmail());
+      return Optional.of((authentication.getPrincipal().toString()));
 
 
     }

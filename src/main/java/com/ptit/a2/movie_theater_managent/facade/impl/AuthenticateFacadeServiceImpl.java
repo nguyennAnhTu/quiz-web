@@ -95,6 +95,7 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
       claims.put(CLAIM_AUTHORITIES_KEY, user.getIsAdmin());
     }
 
+    log.info("(buildClaimsForToken) claims: {}", claims);
     return claims;
   }
 }

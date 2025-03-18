@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
 @Table(name = "films")
 public class Film extends AuditEntity {
@@ -22,5 +22,6 @@ public class Film extends AuditEntity {
   private Integer duration;
   private Integer ageLimit;
   private Date releaseDate;
+  private String thumbnailUrl;
   private String trailerUrl;
 }

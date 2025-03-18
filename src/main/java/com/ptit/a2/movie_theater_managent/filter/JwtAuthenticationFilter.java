@@ -69,9 +69,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//
 
       boolean isAdmin = jwtTokenService.getAuthoritiesFromToken(accessToken);
 
+      log.debug("isAdmin: {}", isAdmin);
+
       List<GrantedAuthority> authorities = isAdmin
             ? List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
             : List.of(new SimpleGrantedAuthority("ROLE_USER"));
+
+      log.info("(doFilterInternal) authorities: {}", authorities);
 
       Authentication authentication = new UsernamePasswordAuthenticationToken(
             userId,

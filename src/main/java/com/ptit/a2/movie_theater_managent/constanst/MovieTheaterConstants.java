@@ -32,6 +32,7 @@ public class MovieTheaterConstants {
     public static final String USER_NOT_FOUND = "user not found";
     public static final String INCORRECT_PASSWORD = "incorrect password";
     public static final String EXPIRED_TOKEN = "expired token";
+    public static final String GENRE_NOT_FOUND = "genre not found";
   }
 
 
@@ -71,7 +72,7 @@ public class MovieTheaterConstants {
     public static String AUTHORIZATION = "Authorization";
     public static String[] MATCHER_USER_API = {"/api/v1/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**"
           , "/actuator/", "/api/v1/reports/**"};
-    public static String[] MATCHER_ADMIN_API = {"/api/v1/admin/**"};
+    public static String[] MATCHER_ADMIN_API = {"/api/v1/genres/**, /api/v1/films/**"};
     public static String CLAIMS = "claims";
     public static final String CLAIM_EMAIL_KEY = "email";
     public static final String CLAIM_AUTHORITIES_KEY = "authorities";
@@ -101,7 +102,20 @@ public class MovieTheaterConstants {
   }
 
   public static class RedisConstant {
+    private RedisConstant() {}
+
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
     public static final String ACCESS_TOKEN_KEY = "access_token";
+  }
+
+  public static class CloudinaryConstant {
+    private CloudinaryConstant() {}
+
+    public static final String CLOUDINARY_NAME = "cloud_name";
+    public static final String CLOUDINARY_NAME_VALUE = "diorkbloc";
+    public static final String CLOUDINARY_API_KEY = "api_key";
+    public static final String CLOUDINARY_API_KEY_VALUE = "281948166373512";
+    public static final String CLOUDINARY_API_SECRET = "api_secret";
+    public static final String CLOUDINARY_API_SECRET_VALUE = "0ujSmYM_wBMIhKr0v6EMFjHwUG8";
   }
 }
