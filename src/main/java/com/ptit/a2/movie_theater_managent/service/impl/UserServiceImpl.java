@@ -38,9 +38,7 @@ public class UserServiceImpl implements UserService {
     User user = User.of(
           request.getEmail(),
           getPasswordEncoder().encode(request.getPassword()),
-          request.getName(),
-          request.getDateOfBirth(),
-          request.getPhoneNumber(),
+          request.getUsername(),
           request.getIsAdmin()
     );
     repository.save(user);
@@ -48,9 +46,7 @@ public class UserServiceImpl implements UserService {
     return AuthRegisterResponse.of(
           user.getId(),
           user.getEmail(),
-          user.getName(),
-          user.getDateOfBirth(),
-          user.getPhoneNumber(),
+          user.getUsername(),
           user.getIsAdmin()
     );
   }
@@ -136,19 +132,15 @@ public class UserServiceImpl implements UserService {
   }
 
   private void updateField(User user, UserUpdateRequest request) {
-    user.setName(request.getName());
-    user.setDateOfBirth(request.getDateOfBirth());
+    user.setUsername(request.getName());
     user.setIsAdmin(request.getIsAdmin());
-    user.setPhoneNumber(request.getPhoneNumber());
   }
 
   private UserResponse toDTO(User user) {
     return UserResponse.of(
           user.getId(),
           user.getEmail(),
-          user.getName(),
-          user.getDateOfBirth(),
-          user.getPhoneNumber(),
+          user.getUsername(),
           user.getIsAdmin()
     );
   }

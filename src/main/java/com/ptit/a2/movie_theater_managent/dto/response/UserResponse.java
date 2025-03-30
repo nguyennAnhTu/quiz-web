@@ -15,8 +15,6 @@ import lombok.Setter;
 public class UserResponse {
   private Integer id;
   private String email;
-  private String name;
-  private String dateOfBirth;
-  private String phoneNumber;
+  private String username;
   private Boolean isAdmin;
 }

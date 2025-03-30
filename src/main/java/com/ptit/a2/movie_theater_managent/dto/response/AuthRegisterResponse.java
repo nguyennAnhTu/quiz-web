@@ -16,7 +16,5 @@ public class AuthRegisterResponse {
   private Integer id;
   private String email;
   private String name;
-  private String dateOfBirth;
-  private String phoneNumber;
   private Boolean isAdmin;
 }
