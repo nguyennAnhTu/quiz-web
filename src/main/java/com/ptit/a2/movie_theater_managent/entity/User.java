@@ -17,8 +17,18 @@ import lombok.Setter;
 public class User extends AuditEntity {
   private String email;
   private String password;
-  private String name;
-  private String dateOfBirth;
-  private String phoneNumber;
+  private String username;
+  private String profilePictureLink;
   private Boolean isAdmin;
+
+  public static User of(String email, String password, String username, Boolean isAdmin) {
+    return new User(email, password, username, isAdmin);
+  }
+
+  private User(String email, String password, String username, Boolean isAdmin) {
+    this.email = email;
+    this.password = password;
+    this.username = username;
+    this.isAdmin = isAdmin;
+  }
 }

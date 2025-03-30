@@ -7,10 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
   Boolean existsByEmail(String email);
 
@@ -18,21 +20,19 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
   @Query("""
         SELECT new com.ptit.a2.movie_theater_managent.dto.response.UserResponse(
-                u.id, u.email,u.name, u.dateOfBirth, u.phoneNumber, u.isAdmin
+                u.id, u.email,u.username, u.isAdmin
                 ) FROM User u WHERE
                 :keyword = '' OR
-                LOWER(u.name) ILIKE %:keyword% OR
-                LOWER(u.email) ILIKE %:keyword% OR
-                LOWER(u.phoneNumber) ILIKE %:keyword%
+                LOWER(u.username) ILIKE %:keyword% OR
+                LOWER(u.email) ILIKE %:keyword%
         """)
   Page<UserResponse> list(@Param("keyword") String keyword, Pageable pageable);
 
   @Query("""
         SELECT u FROM User u WHERE
                 :keyword = '' OR
-                LOWER(u.name) ILIKE %:keyword% OR
-                LOWER(u.email) ILIKE %:keyword% OR
-                LOWER(u.phoneNumber) ILIKE %:keyword%
+                LOWER(u.username) ILIKE %:keyword% OR
+                LOWER(u.email) ILIKE %:keyword%
         """)
   List<UserResponse> listAll(@Param("keyword") String keyword);
 }

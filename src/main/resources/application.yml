@@ -1,6 +1,10 @@
 spring:
   application:
     name: movie-theater
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/quiz-web
   profiles:
     active: ${PROFILE_ACTIVE:dev-local}
   liquibase:

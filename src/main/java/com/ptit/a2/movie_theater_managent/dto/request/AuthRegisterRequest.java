@@ -21,11 +21,7 @@ public class AuthRegisterRequest {
   @ValidationPassword
   private String password;
 
-  private String name;
-
-  private String dateOfBirth;
-
-  private String phoneNumber;
+  private String username;
 
   private Boolean isAdmin;
 }
