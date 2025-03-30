@@ -74,6 +74,7 @@ public class MovieTheaterConstants {
           , "/actuator/"};
     public static String[] MATCHER_ADMIN_API = {"/api/v1/genres/**, /api/v1/films/**"};
     public static String CLAIMS = "claims";
+    public static final String CLAIM_ID_KEY = "id";
     public static final String CLAIM_EMAIL_KEY = "email";
     public static final String CLAIM_AUTHORITIES_KEY = "authorities";
   }

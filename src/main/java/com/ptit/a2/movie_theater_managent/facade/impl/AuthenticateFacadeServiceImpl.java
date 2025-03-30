@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.AuthConstant.CLAIM_AUTHORITIES_KEY;
-import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.AuthConstant.CLAIM_EMAIL_KEY;
+import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.AuthConstant.*;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.ACCESS_TOKEN_KEY;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.REFRESH_TOKEN_KEY;
 import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
@@ -89,6 +88,7 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
   private Map<String, Object> buildClaimsForToken(final User user, TokenType tokenType) {
     Map<String, Object> claims = new HashMap<>();
 
+    claims.put(CLAIM_ID_KEY, user.getId());
     claims.put(CLAIM_EMAIL_KEY, user.getEmail());
 
     if (tokenType == TokenType.ACCESS_TOKEN) {

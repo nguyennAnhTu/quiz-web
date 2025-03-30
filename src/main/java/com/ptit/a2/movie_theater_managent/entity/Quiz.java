@@ -18,5 +18,7 @@ public class Quiz extends AuditEntity {
   private String title;
   private String description;
   private String mediaLink;
-
+  private Integer modifier;
+  private Double rating;
+  private Integer userId;
 }
