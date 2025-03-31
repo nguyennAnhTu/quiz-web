@@ -2,7 +2,6 @@ package com.ptit.a2.movie_theater_managent.constanst.enums;
 
 public enum QuizModifier {
   PRIVATE(-1),
-  UNLISTED(0),
   PUBLISH(1);
 
   private final int value;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2025-0330-create-table-quiz-tag" author="tuna">
+        <createTable tableName="quiz_tag">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="quiz_id" type="bigint"/>
+            <column name="tag_id" type="bigint"/>
+
+            <column name="created_by" type="varchar"/>
+            <column name="created_at" type="bigint"/>
+            <column name="last_updated_by" type="varchar"/>
+            <column name="last_updated_at"  type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="quiz_tag"
+                baseColumnNames="quiz_id"
+                constraintName="fk_quiz_tag_quiz"
+                referencedTableName="quizzes"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="quiz_tag"
+                baseColumnNames="tag_id"
+                constraintName="fk_quiz_tag_tag"
+                referencedTableName="tags"
+                referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
