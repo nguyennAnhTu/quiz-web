@@ -11,14 +11,24 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
 @Table(name = "quizzes")
 public class Quiz extends AuditEntity {
-  private String title;
+  private String name;
   private String description;
   private String mediaLink;
   private Integer modifier;
   private Double rating;
-  private Integer userId;
+
+  private Quiz (String name, String description, String mediaLink, Integer modifier) {
+    this.name = name;
+    this.description = description;
+    this.mediaLink = mediaLink;
+    this.modifier = modifier;
+  }
+
+  public static Quiz of(String name, String description, String mediaLink, Integer modifier) {
+    return new Quiz(name, description, mediaLink, modifier);
+  }
 }

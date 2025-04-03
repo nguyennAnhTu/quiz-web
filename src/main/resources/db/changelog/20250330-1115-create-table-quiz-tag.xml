@@ -12,9 +12,9 @@
             <column name="quiz_id" type="bigint"/>
             <column name="tag_id" type="bigint"/>
 
-            <column name="created_by" type="varchar"/>
+            <column name="created_by" type="bigint"/>
             <column name="created_at" type="bigint"/>
-            <column name="last_updated_by" type="varchar"/>
+            <column name="last_updated_by" type="bigint"/>
             <column name="last_updated_at"  type="bigint"/>
         </createTable>
 

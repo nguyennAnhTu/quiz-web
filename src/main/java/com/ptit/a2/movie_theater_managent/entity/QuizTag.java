@@ -15,6 +15,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "quiz_tag")
 public class QuizTag extends AuditEntity {
-  private Long quizId;
-  private Long tagId;
+  private Integer quizId;
+  private Integer tagId;
 }
