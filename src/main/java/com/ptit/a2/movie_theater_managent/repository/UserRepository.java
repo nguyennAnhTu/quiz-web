@@ -35,4 +35,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                 LOWER(u.email) ILIKE %:keyword%
         """)
   List<UserResponse> listAll(@Param("keyword") String keyword);
+
+  Boolean existsByUsername(String username);
 }

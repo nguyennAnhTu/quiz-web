@@ -13,9 +13,9 @@
             <column name="is_correct" type="boolean"/>
             <column name="question_id" type="bigint"/>
 
-            <column name="created_by" type="varchar"/>
+            <column name="created_by" type="bigint"/>
             <column name="created_at" type="bigint"/>
-            <column name="last_updated_by" type="varchar"/>
+            <column name="last_updated_by" type="bigint"/>
             <column name="last_updated_at"  type="bigint"/>
         </createTable>
 

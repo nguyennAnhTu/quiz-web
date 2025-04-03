@@ -1,4 +1,5 @@
-package com.ptit.a2.movie_theater_managent.dto.request.user;
+package com.ptit.a2.movie_theater_managent.dto.response;
+
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -12,6 +13,9 @@ import lombok.Setter;
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserUpdateRequest {
-  private String username;
+public class AnswerResponse {
+  private Integer id;
+  private String content;
+  private boolean isCorrect;
+  private Integer questionId;
 }

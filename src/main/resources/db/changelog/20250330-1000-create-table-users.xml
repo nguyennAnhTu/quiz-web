@@ -11,13 +11,13 @@
             </column>
             <column name="email" type="varchar(255)"/>
             <column name="password" type="varchar(255)"/>
-            <column name="user_name" type="varchar(255)"/>
+            <column name="username" type="varchar(255)"/>
             <column name="profile_picture_link" type="varchar"/>
             <column name="is_admin" type="boolean"/>
 
-            <column name="created_by" type="varchar"/>
+            <column name="created_by" type="bigint"/>
             <column name="created_at" type="bigint"/>
-            <column name="last_updated_by" type="varchar"/>
+            <column name="last_updated_by" type="bigint"/>
             <column name="last_updated_at"  type="bigint"/>
         </createTable>
     </changeSet>

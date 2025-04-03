@@ -1,5 +1,8 @@
 package com.ptit.a2.movie_theater_managent.service.impl;
 
+import com.ptit.a2.movie_theater_managent.dto.request.CreateQuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
+import com.ptit.a2.movie_theater_managent.entity.Quiz;
 import com.ptit.a2.movie_theater_managent.repository.QuizRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -9,4 +12,29 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
   private final QuizRepository repository;
+
+  @Override
+  public QuizResponse create(CreateQuizRequest request) {
+    log.info("(create) createQuiz request: {}", request);
+      Quiz quiz = Quiz.of(
+            request.getName(),
+            request.getDescription(),
+            request.getMediaLink(),
+            request.getModifier()
+      );
+
+      repository.save(quiz);
+      return this.toDTO(quiz);
+  }
+
+  private QuizResponse toDTO(Quiz quiz) {
+    return QuizResponse.of(
+          quiz.getId(),
+          quiz.getName(),
+          quiz.getDescription(),
+          quiz.getMediaLink(),
+          quiz.getModifier(),
+          quiz.getRating()
+    );
+  }
 }

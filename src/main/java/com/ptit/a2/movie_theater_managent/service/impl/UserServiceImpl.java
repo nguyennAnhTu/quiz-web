@@ -10,6 +10,7 @@ import com.ptit.a2.movie_theater_managent.entity.User;
 import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
 import com.ptit.a2.movie_theater_managent.exception.authentication.PasswordIncorrectException;
 import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.UsernameExistedException;
 import com.ptit.a2.movie_theater_managent.exception.film.BadRequestException;
 import com.ptit.a2.movie_theater_managent.repository.UserRepository;
 import com.ptit.a2.movie_theater_managent.service.UserService;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     log.info("(create user) request: {}", request);
 
     this.checkEmailExists(request.getEmail());
+    this.checkUsernameExists(request.getUsername());
     User user = User.of(
           request.getEmail(),
           getPasswordEncoder().encode(request.getPassword()),
@@ -132,8 +134,7 @@ public class UserServiceImpl implements UserService {
   }
 
   private void updateField(User user, UserUpdateRequest request) {
-    user.setUsername(request.getName());
-    user.setIsAdmin(request.getIsAdmin());
+    user.setUsername(request.getUsername());
   }
 
   private UserResponse toDTO(User user) {
@@ -148,6 +149,12 @@ public class UserServiceImpl implements UserService {
   private void checkEmailExists(String email) {
     if (Boolean.TRUE.equals(repository.existsByEmail(email))) {
       throw new EmailExistedException();
+    }
+  }
+
+  private void checkUsernameExists(String username) {
+    if(Boolean.TRUE.equals(repository.existsByUsername(username))) {
+      throw new UsernameExistedException();
     }
   }
 }

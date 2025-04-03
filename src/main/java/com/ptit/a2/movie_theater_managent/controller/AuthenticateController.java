@@ -24,6 +24,7 @@ public class AuthenticateController {
   private final AuthenticateFacadeService authenticateFacadeService;
 
   @PostMapping("/register")
+
   public ResponseGeneral<AuthRegisterResponse> register(
         @RequestBody @Valid AuthRegisterRequest request
   ) {

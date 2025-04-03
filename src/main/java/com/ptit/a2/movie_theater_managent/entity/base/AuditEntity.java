@@ -13,13 +13,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 @MappedSuperclass
 public class AuditEntity extends BaseEntity {
   @CreatedBy
-  private String createdBy;
+  private Integer createdBy;
 
   @CreatedDate
   private Long createdAt;
 
   @LastModifiedBy
-  private String lastUpdatedBy;
+  private Integer lastUpdatedBy;
 
   @LastModifiedDate
   private Long lastUpdatedAt;
