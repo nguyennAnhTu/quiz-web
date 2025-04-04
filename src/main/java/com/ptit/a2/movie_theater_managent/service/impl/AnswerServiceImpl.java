@@ -8,6 +8,8 @@ import com.ptit.a2.movie_theater_managent.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 public class AnswerServiceImpl implements AnswerService {
@@ -19,6 +21,14 @@ public class AnswerServiceImpl implements AnswerService {
 
     Answer answer = Answer.of(request.getContent(), request.getIsCorrect(), questionId);
     return this.toDTO(repository.save(answer));
+  }
+
+  @Override
+  public List<AnswerResponse> findByQuestionId(Integer questionId) {
+    log.info("find answer by question id: {}", questionId);
+
+    List<Answer> answers = repository.findAllByQuestionId(questionId);
+    return answers.stream().map(this::toDTO).toList();
   }
 
   private AnswerResponse toDTO(Answer answer) {

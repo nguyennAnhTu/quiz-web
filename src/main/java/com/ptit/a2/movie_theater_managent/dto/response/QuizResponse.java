@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor(staticName = "of")
@@ -19,4 +21,7 @@ public class QuizResponse {
   private String mediaLink;
   private Integer modifier;
   private Double rating;
+  private Integer creatorId;
+  private String creatorName;
+  List<QuestionResponse> questionResponses;
 }

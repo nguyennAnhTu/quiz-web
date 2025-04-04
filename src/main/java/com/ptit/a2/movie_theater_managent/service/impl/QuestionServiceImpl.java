@@ -8,6 +8,9 @@ import com.ptit.a2.movie_theater_managent.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
@@ -21,10 +24,18 @@ public class QuestionServiceImpl implements QuestionService {
           request.getContent(),
           request.getMediaLink(),
           request.getFunFact(),
-          quizId
+          quizId,
+          request.getTime()
     );
 
     return this.toDTO(repository.save(question));
+  }
+
+  @Override
+  public List<QuestionResponse> findByQuizId(Integer quizId) {
+    List<Question> questions = repository.findAllByQuizId(quizId);
+
+    return questions.stream().map(this::toDTO).toList();
   }
 
   private QuestionResponse toDTO(Question question) {
@@ -33,7 +44,9 @@ public class QuestionServiceImpl implements QuestionService {
           question.getContent(),
           question.getMediaLink(),
           question.getFunFact(),
-          question.getQuizId()
+          question.getQuizId(),
+          question.getTime()
     );
   }
+
 }

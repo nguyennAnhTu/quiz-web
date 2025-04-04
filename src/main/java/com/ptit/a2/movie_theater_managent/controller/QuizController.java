@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.CreateQuizRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.ptit.a2.movie_theater_managent.cloudinary.CloudinaryHelper.uploadAndGetFileUrl;
+import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.SUCCESS;
 
 @RestController
 @RequestMapping("api/v1/quizzes")
@@ -38,6 +40,18 @@ public class QuizController {
     quizFacadeService.create(requestString, quizImage, questionImages);
     return ResponseGeneral.ofCreated(
           "Tạo quiz thành công"
+    );
+  }
+
+  @GetMapping("/{id}")
+  public ResponseGeneral<QuizResponse> find(
+        @PathVariable Integer id
+  ) {
+    log.info("===start find quiz");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizFacadeService.find(id)
     );
   }
 }

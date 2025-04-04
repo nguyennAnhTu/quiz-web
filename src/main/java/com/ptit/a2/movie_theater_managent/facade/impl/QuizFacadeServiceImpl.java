@@ -30,6 +30,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
   private final QuizTagService quizTagService;
   private final QuestionService questionService;
   private final AnswerService answerService;
+  private final UserService userService;
 
   @Override
   @Transactional
@@ -73,5 +74,19 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
       }
     }
 
+  }
+
+  @Override
+  public QuizResponse find(Integer id) {
+    log.info("===start find quiz");
+
+    QuizResponse quizResponse = quizService.find(id);
+
+    quizResponse.setQuestionResponses(questionService.findByQuizId(quizResponse.getId()));
+    for (QuestionResponse questionResponse : quizResponse.getQuestionResponses()) {
+      questionResponse.setAnswerResponses(answerService.findByQuestionId(questionResponse.getId()));
+    }
+
+    return quizResponse;
   }
 }
