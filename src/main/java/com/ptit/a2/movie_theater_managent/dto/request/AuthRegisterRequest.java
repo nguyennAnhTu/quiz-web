@@ -15,7 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AuthRegisterRequest {
+public class
+AuthRegisterRequest {
   @ValidationEmail
   private String email;
 

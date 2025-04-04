@@ -18,5 +18,6 @@ public class QuestionRequest {
   private String content;
   private String mediaLink;
   private String funFact;
+  private Integer time;
   private List<AnswerRequest> answers;
 }

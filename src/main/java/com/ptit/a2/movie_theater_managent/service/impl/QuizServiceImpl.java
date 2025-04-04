@@ -3,10 +3,15 @@ package com.ptit.a2.movie_theater_managent.service.impl;
 import com.ptit.a2.movie_theater_managent.dto.request.CreateQuizRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
+import com.ptit.a2.movie_theater_managent.exception.quiz.QuizNotFoundException;
 import com.ptit.a2.movie_theater_managent.repository.QuizRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
+
+import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +32,13 @@ public class QuizServiceImpl implements QuizService {
       return this.toDTO(quiz);
   }
 
+  @Override
+  public QuizResponse find(Integer id) {
+    log.info("(find) findQuiz request: {}", id);
+
+    return this.toDTO(this.get(id));
+  }
+
   private QuizResponse toDTO(Quiz quiz) {
     return QuizResponse.of(
           quiz.getId(),
@@ -34,7 +46,21 @@ public class QuizServiceImpl implements QuizService {
           quiz.getDescription(),
           quiz.getMediaLink(),
           quiz.getModifier(),
-          quiz.getRating()
+          quiz.getRating(),
+          quiz.getCreatedBy(),
+          null,
+          null
     );
+  }
+
+  private Quiz get(Integer id) {
+    Integer userId = getCurrentUserId();
+
+    Quiz quiz = repository.findById(id).orElseThrow(QuizNotFoundException::new);
+    if (quiz.getModifier()==0 && !Objects.equals(userId, quiz.getCreatedBy())) {
+      throw new QuizNotFoundException();
+    }
+
+    return quiz;
   }
 }

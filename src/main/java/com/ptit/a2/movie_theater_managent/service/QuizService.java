@@ -5,4 +5,6 @@ import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 
 public interface QuizService {
   QuizResponse create(CreateQuizRequest request);
+
+  QuizResponse find(Integer id);
 }

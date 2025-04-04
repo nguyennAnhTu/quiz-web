@@ -20,17 +20,19 @@ public class QuestionResponse {
   private String mediaLink;
   private String funFact;
   private Integer quizId;
-  private List<Integer> answerIds;
+  private Integer time;
+  private List<AnswerResponse> answerResponses;
 
-  public static QuestionResponse of(Integer id, String content, String mediaLink, String funFact, Integer quizId) {
-    return new QuestionResponse(id, content, mediaLink, funFact, quizId);
+  public static QuestionResponse of(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time) {
+    return new QuestionResponse(id, content, mediaLink, funFact, quizId, time);
   }
 
-  private QuestionResponse(Integer id, String content, String mediaLink, String funFact, Integer quizId) {
+  private QuestionResponse(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time) {
     this.id = id;
     this.content = content;
     this.mediaLink = mediaLink;
     this.funFact = funFact;
     this.quizId = quizId;
+    this.time = time;
   }
 }

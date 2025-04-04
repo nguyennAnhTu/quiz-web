@@ -26,4 +26,22 @@
                 referencedTableName="quizzes"
                 referencedColumnNames="id"/>
     </changeSet>
+    
+    <changeSet id="20250403-add-column-time" author="tuna">
+        <addColumn tableName="quizzes">
+            <column name="time" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250403-drop-column-time" author="tuna">
+        <dropColumn tableName="quizzes">
+            <column name="time" type="int"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="20250403-add-column-time-to-questions" author="tuna">
+        <addColumn tableName="questions">
+            <column name="time" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
