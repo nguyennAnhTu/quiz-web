@@ -1,6 +1,6 @@
 package com.ptit.a2.movie_theater_managent.service.impl;
 
-import com.ptit.a2.movie_theater_managent.dto.request.CreateQuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
 import com.ptit.a2.movie_theater_managent.exception.quiz.QuizNotFoundException;
@@ -8,6 +8,7 @@ import com.ptit.a2.movie_theater_managent.repository.QuizRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -19,7 +20,8 @@ public class QuizServiceImpl implements QuizService {
   private final QuizRepository repository;
 
   @Override
-  public QuizResponse create(CreateQuizRequest request) {
+  @Transactional
+  public QuizResponse create(QuizRequest request) {
     log.info("(create) createQuiz request: {}", request);
       Quiz quiz = Quiz.of(
             request.getName(),
@@ -47,9 +49,7 @@ public class QuizServiceImpl implements QuizService {
           quiz.getMediaLink(),
           quiz.getModifier(),
           quiz.getRating(),
-          quiz.getCreatedBy(),
-          null,
-          null
+          quiz.getCreatedBy()
     );
   }
 

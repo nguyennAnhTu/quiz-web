@@ -14,11 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CreateQuizRequest {
+public class QuizRequest {
   private String name;
   private String description;
   private String mediaLink;
   private List<Integer> tagIds;
   private Integer modifier;
-  private List<QuestionRequest> questions;
 }

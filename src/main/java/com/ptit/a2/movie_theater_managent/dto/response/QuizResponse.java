@@ -22,6 +22,4 @@ public class QuizResponse {
   private Integer modifier;
   private Double rating;
   private Integer creatorId;
-  private String creatorName;
-  List<QuestionResponse> questionResponses;
 }
