@@ -3,7 +3,7 @@ package com.ptit.a2.movie_theater_managent.facade.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptit.a2.movie_theater_managent.dto.request.AnswerRequest;
-import com.ptit.a2.movie_theater_managent.dto.request.CreateQuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
@@ -42,7 +42,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     log.info("===start create quiz");
 
     ObjectMapper mapper = new ObjectMapper();
-    CreateQuizRequest request = mapper.readValue(requestString, CreateQuizRequest.class);
+    QuizRequest request = mapper.readValue(requestString, QuizRequest.class);
 
     if(quizImage != null) {
       request.setMediaLink(uploadAndGetFileUrl(quizImage));
@@ -57,36 +57,37 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     }
 
     // Gán ảnh vào đúng câu hỏi dựa trên mediaLink tạm thời
-    for (QuestionRequest question : request.getQuestions()) {
-      if (imageMappings.containsKey(question.getMediaLink())) {
-        question.setMediaLink(imageMappings.get(question.getMediaLink()));
-      }
-    }
-
-    QuizResponse quizResponse = quizService.create(request);
-    for (Integer tagId : request.getTagIds()) {
-      quizTagService.create(quizResponse.getId(), tagId);
-    }
-    for (QuestionRequest questionRequest : request.getQuestions()) {
-      QuestionResponse questionResponse = questionService.create(questionRequest, quizResponse.getId());
-      for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
-        answerService.create(answerRequest, questionResponse.getId());
-      }
-    }
+//    for (QuestionRequest question : request.getQuestions()) {
+//      if (imageMappings.containsKey(question.getMediaLink())) {
+//        question.setMediaLink(imageMappings.get(question.getMediaLink()));
+//      }
+//    }
+//
+//    QuizResponse quizResponse = quizService.create(request);
+//    for (Integer tagId : request.getTagIds()) {
+//      quizTagService.create(quizResponse.getId(), tagId);
+//    }
+//    for (QuestionRequest questionRequest : request.getQuestions()) {
+//      QuestionResponse questionResponse = questionService.create(questionRequest, quizResponse.getId());
+//      for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
+//        answerService.create(answerRequest, questionResponse.getId());
+//      }
+//    }
 
   }
 
   @Override
   public QuizResponse find(Integer id) {
-    log.info("===start find quiz");
-
-    QuizResponse quizResponse = quizService.find(id);
-
-    quizResponse.setQuestionResponses(questionService.findByQuizId(quizResponse.getId()));
-    for (QuestionResponse questionResponse : quizResponse.getQuestionResponses()) {
-      questionResponse.setAnswerResponses(answerService.findByQuestionId(questionResponse.getId()));
-    }
-
-    return quizResponse;
+//    log.info("===start find quiz");
+//
+//    QuizResponse quizResponse = quizService.find(id);
+//
+//    quizResponse.setQuestionResponses(questionService.findByQuizId(quizResponse.getId()));
+//    for (QuestionResponse questionResponse : quizResponse.getQuestionResponses()) {
+//      questionResponse.setAnswerResponses(answerService.findByQuestionId(questionResponse.getId()));
+//    }
+//
+//    return quizResponse;
+    return null;
   }
 }
