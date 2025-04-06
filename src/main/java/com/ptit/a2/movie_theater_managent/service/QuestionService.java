@@ -9,4 +9,6 @@ public interface QuestionService {
   QuestionResponse create(QuestionRequest request, Integer quizId);
 
   List<QuestionResponse> findByQuizId(Integer quizId);
+
+  void deleteByQuizId(Integer quizId);
 }

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.ptit.a2.movie_theater_managent.cloudinary.CloudinaryHelper.uploadAndGetFileUrl;
+import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -59,12 +60,31 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
   public QuizResponse update(Integer id, QuizRequest request) {
     log.info("===start update quiz");
 
-    quizTagService.delete(id);
     QuizResponse quizResponse = quizService.update(id, request);
+
+    quizTagService.delete(id);
     for (Integer tagId : request.getTagIds()) {
       quizTagService.create(quizResponse.getId(), tagId);
     }
 
     return quizResponse;
+  }
+
+  @Override
+  @Transactional
+  public void delete(Integer id) {
+    log.info("===start delete quiz");
+
+    List<Integer> questionIds =
+          questionService.findByQuizId(id).
+                stream().map(QuestionResponse::getId).toList();
+
+    for (Integer questionId : questionIds) {
+      answerService.deletebyQuestionId(questionId);
+    }
+
+    questionService.deleteByQuizId(id);
+    quizTagService.delete(id);
+    quizService.delete(id);
   }
 }

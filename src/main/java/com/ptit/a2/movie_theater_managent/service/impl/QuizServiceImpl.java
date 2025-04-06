@@ -42,7 +42,6 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  @Transactional
   public QuizResponse update(Integer id, QuizRequest request) {
     log.info("(update) updateQuiz request: {}", request);
 
@@ -53,6 +52,14 @@ public class QuizServiceImpl implements QuizService {
     quiz.setModifier(request.getModifier());
 
     return this.toDTO(repository.save(quiz));
+  }
+
+  @Override
+  public void delete(Integer id) {
+    log.info("(delete) deleteQuiz request: {}", id);
+
+    Quiz quiz = this.get(id);
+    repository.delete(quiz);
   }
 
   private QuizResponse toDTO(Quiz quiz) {

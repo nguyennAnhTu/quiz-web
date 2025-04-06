@@ -13,4 +13,6 @@ public interface QuizFacadeService {
   QuizResponse find(Integer id);
 
   QuizResponse update(Integer id, QuizRequest request);
+
+  void delete(Integer id);
 }
