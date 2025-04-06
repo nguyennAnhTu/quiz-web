@@ -41,7 +41,20 @@ public class QuizController {
 
     return ResponseGeneral.ofSuccess(
           SUCCESS,
-          quizService.find(id)
+          quizFacadeService.find(id)
+    );
+  }
+
+  @PutMapping("/{id}")
+  public ResponseGeneral<QuizResponse> update(
+        @PathVariable Integer id,
+        @RequestBody QuizRequest request
+  ) {
+    log.info("===start update quiz");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizFacadeService.update(id, request)
     );
   }
 }

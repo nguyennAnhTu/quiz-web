@@ -41,6 +41,20 @@ public class QuizServiceImpl implements QuizService {
     return this.toDTO(this.get(id));
   }
 
+  @Override
+  @Transactional
+  public QuizResponse update(Integer id, QuizRequest request) {
+    log.info("(update) updateQuiz request: {}", request);
+
+    Quiz quiz = this.get(id);
+    quiz.setName(request.getName());
+    quiz.setDescription(request.getDescription());
+    quiz.setMediaLink(request.getMediaLink());
+    quiz.setModifier(request.getModifier());
+
+    return this.toDTO(repository.save(quiz));
+  }
+
   private QuizResponse toDTO(Quiz quiz) {
     return QuizResponse.of(
           quiz.getId(),

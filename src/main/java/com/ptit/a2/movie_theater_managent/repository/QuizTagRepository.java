@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuizTagRepository extends JpaRepository<QuizTag, Integer> {
+  void deleteAllByQuizId(Integer quizId);
 }
