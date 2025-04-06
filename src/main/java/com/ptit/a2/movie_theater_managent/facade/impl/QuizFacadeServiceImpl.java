@@ -7,6 +7,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
+import com.ptit.a2.movie_theater_managent.entity.Quiz;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
 import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.ptit.a2.movie_theater_managent.cloudinary.CloudinaryHelper.uploadAndGetFileUrl;
 
@@ -34,60 +36,35 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
 
   @Override
   @Transactional
-  public void create(
-        String requestString,
-        MultipartFile quizImage,
-        List<MultipartFile> questionImages
-  ) throws JsonProcessingException {
+  public QuizResponse create(QuizRequest request) {
     log.info("===start create quiz");
 
-    ObjectMapper mapper = new ObjectMapper();
-    QuizRequest request = mapper.readValue(requestString, QuizRequest.class);
-
-    if(quizImage != null) {
-      request.setMediaLink(uploadAndGetFileUrl(quizImage));
+    QuizResponse quizResponse = quizService.create(request);
+    for (Integer tagId : request.getTagIds()) {
+      quizTagService.create(quizResponse.getId(), tagId);
     }
 
-    Map<String, String> imageMappings = new HashMap<>();
-    if (questionImages != null) {
-      for (MultipartFile file : questionImages) {
-        String savedUrl = uploadAndGetFileUrl(file);
-        imageMappings.put(file.getOriginalFilename(), savedUrl);
-      }
-    }
-
-    // Gán ảnh vào đúng câu hỏi dựa trên mediaLink tạm thời
-//    for (QuestionRequest question : request.getQuestions()) {
-//      if (imageMappings.containsKey(question.getMediaLink())) {
-//        question.setMediaLink(imageMappings.get(question.getMediaLink()));
-//      }
-//    }
-//
-//    QuizResponse quizResponse = quizService.create(request);
-//    for (Integer tagId : request.getTagIds()) {
-//      quizTagService.create(quizResponse.getId(), tagId);
-//    }
-//    for (QuestionRequest questionRequest : request.getQuestions()) {
-//      QuestionResponse questionResponse = questionService.create(questionRequest, quizResponse.getId());
-//      for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
-//        answerService.create(answerRequest, questionResponse.getId());
-//      }
-//    }
-
+    return quizResponse;
   }
 
   @Override
   public QuizResponse find(Integer id) {
-//    log.info("===start find quiz");
-//
-//    QuizResponse quizResponse = quizService.find(id);
-//
-//    quizResponse.setQuestionResponses(questionService.findByQuizId(quizResponse.getId()));
-//    for (QuestionResponse questionResponse : quizResponse.getQuestionResponses()) {
-//      questionResponse.setAnswerResponses(answerService.findByQuestionId(questionResponse.getId()));
-//    }
-//
-//    return quizResponse;
-    return null;
+    log.info("===start find quiz");
+
+    return quizService.find(id);
+  }
+
+  @Override
+  @Transactional
+  public QuizResponse update(Integer id, QuizRequest request) {
+    log.info("===start update quiz");
+
+    quizTagService.delete(id);
+    QuizResponse quizResponse = quizService.update(id, request);
+    for (Integer tagId : request.getTagIds()) {
+      quizTagService.create(quizResponse.getId(), tagId);
+    }
+
+    return quizResponse;
   }
 }

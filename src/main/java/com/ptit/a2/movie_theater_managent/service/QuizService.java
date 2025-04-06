@@ -7,4 +7,6 @@ public interface QuizService {
   QuizResponse create(QuizRequest request);
 
   QuizResponse find(Integer id);
+
+  QuizResponse update(Integer id, QuizRequest request);
 }

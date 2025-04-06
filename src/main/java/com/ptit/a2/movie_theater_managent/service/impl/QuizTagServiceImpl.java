@@ -17,4 +17,11 @@ public class QuizTagServiceImpl implements QuizTagService {
 
     repository.save(QuizTag.of(quizId, tagId));
   }
+
+  @Override
+  public void delete(Integer quizId) {
+    log.info("delete quiz tag");
+
+    repository.deleteAllByQuizId(quizId);
+  }
 }
