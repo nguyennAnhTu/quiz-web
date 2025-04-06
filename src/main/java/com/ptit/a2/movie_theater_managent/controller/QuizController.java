@@ -57,4 +57,14 @@ public class QuizController {
           quizFacadeService.update(id, request)
     );
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseGeneral<Void> delete(
+        @PathVariable Integer id
+  ) {
+    log.info("===start delete quiz");
+
+    quizFacadeService.delete(id);
+    return ResponseGeneral.ofSuccess(SUCCESS);
+  }
 }

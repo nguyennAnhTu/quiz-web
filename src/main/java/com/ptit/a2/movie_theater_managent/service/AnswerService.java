@@ -9,4 +9,6 @@ public interface AnswerService {
   AnswerResponse create(AnswerRequest request, Integer questionId);
 
   List<AnswerResponse> findByQuestionId(Integer questionId);
+
+  void deletebyQuestionId(Integer questionId);
 }

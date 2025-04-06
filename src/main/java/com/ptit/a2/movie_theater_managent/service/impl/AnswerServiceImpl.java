@@ -31,6 +31,13 @@ public class AnswerServiceImpl implements AnswerService {
     return answers.stream().map(this::toDTO).toList();
   }
 
+  @Override
+  public void deletebyQuestionId(Integer questionId) {
+    log.info("delete answer by question id: {}", questionId);
+
+    repository.deleteAllByQuestionId(questionId);
+  }
+
   private AnswerResponse toDTO(Answer answer) {
     return AnswerResponse.of(
           answer.getId(),

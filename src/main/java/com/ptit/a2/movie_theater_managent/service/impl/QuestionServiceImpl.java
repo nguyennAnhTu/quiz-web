@@ -38,6 +38,13 @@ public class QuestionServiceImpl implements QuestionService {
     return questions.stream().map(this::toDTO).toList();
   }
 
+  @Override
+  public void deleteByQuizId(Integer quizId) {
+    log.info("delete question request: {}", quizId);
+
+    repository.deleteAllByQuizId(quizId);
+  }
+
   private QuestionResponse toDTO(Question question) {
     return QuestionResponse.of(
           question.getId(),
