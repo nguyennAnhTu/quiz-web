@@ -19,5 +19,6 @@ public class Question extends AuditEntity {
   private String mediaLink;
   private String funFact;
   private Integer quizId;
+  private Integer questionOrder;
   private Integer time;
 }

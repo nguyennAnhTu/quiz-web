@@ -62,6 +62,11 @@ public class QuizServiceImpl implements QuizService {
     repository.delete(quiz);
   }
 
+  @Override
+  public boolean exist(Integer id) {
+    return repository.existsById(id);
+  }
+
   private QuizResponse toDTO(Quiz quiz) {
     return QuizResponse.of(
           quiz.getId(),

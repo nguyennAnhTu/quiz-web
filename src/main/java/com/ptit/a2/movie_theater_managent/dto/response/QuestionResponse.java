@@ -21,18 +21,20 @@ public class QuestionResponse {
   private String funFact;
   private Integer quizId;
   private Integer time;
+  private Integer questionOrder;
   private List<AnswerResponse> answerResponses;
 
-  public static QuestionResponse of(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time) {
-    return new QuestionResponse(id, content, mediaLink, funFact, quizId, time);
+  public static QuestionResponse of(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time, Integer order) {
+    return new QuestionResponse(id, content, mediaLink, funFact, quizId, time, order);
   }
 
-  private QuestionResponse(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time) {
+  private QuestionResponse(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time, Integer questionOrder) {
     this.id = id;
     this.content = content;
     this.mediaLink = mediaLink;
     this.funFact = funFact;
     this.quizId = quizId;
     this.time = time;
+    this.questionOrder = questionOrder;
   }
 }

@@ -15,9 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class QuestionRequest {
+  private Integer quizId;
   private String content;
   private String mediaLink;
   private String funFact;
+  private Integer questionOrder;
   private Integer time;
   private List<AnswerRequest> answers;
 }
