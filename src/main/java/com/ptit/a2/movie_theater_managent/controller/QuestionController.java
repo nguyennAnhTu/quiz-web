@@ -30,4 +30,14 @@ public class QuestionController {
           questionFacadeService.create(request)
     );
   }
+
+  @GetMapping("/{id}")
+  public ResponseGeneral<QuestionResponse> find(@PathVariable Integer id) {
+    log.info("===start find question");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          questionFacadeService.find(id)
+    );
+  }
 }

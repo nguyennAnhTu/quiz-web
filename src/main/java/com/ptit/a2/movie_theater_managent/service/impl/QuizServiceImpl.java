@@ -75,7 +75,8 @@ public class QuizServiceImpl implements QuizService {
           quiz.getMediaLink(),
           quiz.getModifier(),
           quiz.getRating(),
-          quiz.getCreatedBy()
+          quiz.getCreatedBy(),
+          null
     );
   }
 

@@ -5,4 +5,6 @@ import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 
 public interface QuestionFacadeService {
   QuestionResponse create(QuestionRequest questionRequest);
+
+  QuestionResponse find(Integer id);
 }

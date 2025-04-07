@@ -52,7 +52,13 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
   public QuizResponse find(Integer id) {
     log.info("===start find quiz");
 
-    return quizService.find(id);
+    QuizResponse quizResponse = quizService.find(id);
+    quizResponse.setQuestions(questionService.findByQuizId(id));
+    for (QuestionResponse questionResponse : quizResponse.getQuestions()) {
+      questionResponse.setAnswerResponses(answerService.findByQuestionId(questionResponse.getId()));
+    }
+
+    return quizResponse;
   }
 
   @Override

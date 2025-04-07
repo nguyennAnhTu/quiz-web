@@ -38,4 +38,16 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
 
     return questionResponse;
   }
+
+  @Override
+  public QuestionResponse find(Integer id) {
+    log.info("===start find question request: {}", id);
+
+    QuestionResponse questionResponse = questionService.find(id);
+    questionResponse.setAnswerResponses(
+          answerService.findByQuestionId(questionResponse.getId())
+    );
+
+    return questionResponse;
+  }
 }

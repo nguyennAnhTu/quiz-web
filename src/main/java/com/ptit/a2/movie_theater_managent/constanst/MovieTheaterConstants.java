@@ -34,6 +34,7 @@ public class MovieTheaterConstants {
     public static final String EXPIRED_TOKEN = "expired token";
     public static final String GENRE_NOT_FOUND = "genre not found";
     public static final String QUIZ_NOT_FOUND = "quiz not found";
+    public static final String QUESTION_NOT_FOUND = "question not found";
   }
 
 

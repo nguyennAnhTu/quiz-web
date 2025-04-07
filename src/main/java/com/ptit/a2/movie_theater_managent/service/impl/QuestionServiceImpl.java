@@ -3,6 +3,7 @@ package com.ptit.a2.movie_theater_managent.service.impl;
 import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 import com.ptit.a2.movie_theater_managent.entity.Question;
+import com.ptit.a2.movie_theater_managent.exception.question.QuestionNotFoundException;
 import com.ptit.a2.movie_theater_managent.repository.QuestionRepository;
 import com.ptit.a2.movie_theater_managent.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,16 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
+  public QuestionResponse find(Integer id) {
+    log.info("find question by id: {}", id);
+
+    return this.toDTO(this.get(id));
+  }
+
+  @Override
   public List<QuestionResponse> findByQuizId(Integer quizId) {
+    log.info("find question by quiz id: {}", quizId);
+
     List<Question> questions = repository.findAllByQuizId(quizId);
 
     return questions.stream().map(this::toDTO).toList();
@@ -57,4 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
     );
   }
 
+  private Question get(Integer id) {
+    return repository.findById(id).orElseThrow(QuestionNotFoundException::new);
+  }
 }

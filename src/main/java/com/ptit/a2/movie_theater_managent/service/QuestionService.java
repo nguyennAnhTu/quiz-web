@@ -8,6 +8,8 @@ import java.util.List;
 public interface QuestionService {
   QuestionResponse create(QuestionRequest request);
 
+  QuestionResponse find(Integer id);
+
   List<QuestionResponse> findByQuizId(Integer quizId);
 
   void deleteByQuizId(Integer quizId);
