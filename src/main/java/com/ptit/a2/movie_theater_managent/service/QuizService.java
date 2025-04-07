@@ -11,4 +11,6 @@ public interface QuizService {
   QuizResponse update(Integer id, QuizRequest request);
 
   void delete(Integer id);
+
+  boolean exist(Integer id);
 }

@@ -6,7 +6,7 @@ import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 import java.util.List;
 
 public interface QuestionService {
-  QuestionResponse create(QuestionRequest request, Integer quizId);
+  QuestionResponse create(QuestionRequest request);
 
   List<QuestionResponse> findByQuizId(Integer quizId);
 

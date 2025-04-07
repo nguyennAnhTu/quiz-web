@@ -44,4 +44,14 @@
             <column name="time" type="int"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20250406-2238-add-column-order" author="tuna">
+        <addColumn tableName="questions">
+            <column name="order" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250407-1542-rename-column-order" author="tuna">
+        <renameColumn tableName="questions" oldColumnName="order" newColumnName="question_order"/>
+    </changeSet>
 </databaseChangeLog>
