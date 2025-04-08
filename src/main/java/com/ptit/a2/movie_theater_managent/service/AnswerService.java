@@ -10,5 +10,6 @@ public interface AnswerService {
 
   List<AnswerResponse> findByQuestionId(Integer questionId);
 
-  void deletebyQuestionId(Integer questionId);
+  void deleteByQuestionId(Integer questionId);
+
 }

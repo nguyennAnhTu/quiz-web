@@ -7,4 +7,9 @@ public interface QuestionFacadeService {
   QuestionResponse create(QuestionRequest questionRequest);
 
   QuestionResponse find(Integer id);
+
+  void delete(Integer id);
+
+  QuestionResponse update(Integer id, QuestionRequest questionRequest);
+
 }

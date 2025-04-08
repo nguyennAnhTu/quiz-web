@@ -11,7 +11,7 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 
 @Slf4j
 public class CloudinaryHelper {
-  private static Cloudinary cloudinary;
+  private static final Cloudinary cloudinary;
 
   static {
     cloudinary = new Cloudinary(

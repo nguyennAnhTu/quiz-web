@@ -50,4 +50,28 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
 
     return questionResponse;
   }
+
+  @Override
+  public void delete(Integer id) {
+    log.info("(delete) id:{}", id);
+
+    answerService.deleteByQuestionId(id);
+    questionService.delete(id);
+
+  }
+
+  @Override
+  public QuestionResponse update(Integer id, QuestionRequest questionRequest) {
+    if (!quizService.exist(questionRequest.getQuizId())) {
+      throw new QuizNotFoundException();
+    }
+
+    QuestionResponse questionResponse = questionService.update(id,questionRequest);
+    answerService.deleteByQuestionId(id);
+    for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
+      answerService.create(answerRequest, questionResponse.getId());
+    }
+
+    return questionResponse;
+  }
 }
