@@ -1,28 +1,16 @@
 package com.ptit.a2.movie_theater_managent.facade.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptit.a2.movie_theater_managent.dto.request.AnswerRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
-import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
-import com.ptit.a2.movie_theater_managent.entity.Quiz;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
 import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import static com.ptit.a2.movie_theater_managent.cloudinary.CloudinaryHelper.uploadAndGetFileUrl;
-import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -86,7 +74,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
                 stream().map(QuestionResponse::getId).toList();
 
     for (Integer questionId : questionIds) {
-      answerService.deletebyQuestionId(questionId);
+      answerService.deleteByQuestionId(questionId);
     }
 
     questionService.deleteByQuizId(id);

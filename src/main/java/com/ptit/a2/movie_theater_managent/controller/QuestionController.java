@@ -4,6 +4,7 @@ import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuestionFacadeService;
+import com.ptit.a2.movie_theater_managent.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 @RequiredArgsConstructor
 public class QuestionController {
   private final QuestionFacadeService questionFacadeService;
+  private final QuestionService questionService;
 
   @PostMapping
   @ResponseStatus(value = HttpStatus.CREATED)
@@ -40,4 +42,28 @@ public class QuestionController {
           questionFacadeService.find(id)
     );
   }
+
+  @PutMapping("{id}")
+  public ResponseGeneral<QuestionResponse> update(
+        @PathVariable Integer id,
+        @RequestBody QuestionRequest request
+  ) {
+    log.info("===start update question");
+
+    return ResponseGeneral.ofCreated(
+          SUCCESS,
+          questionFacadeService.update(id,request)
+    );
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseGeneral<Void> delete(@PathVariable Integer id) {
+    log.info("===start delete question");
+
+    questionFacadeService.delete(id);
+    return ResponseGeneral.ofSuccess(
+          SUCCESS
+    );
+  }
+
 }

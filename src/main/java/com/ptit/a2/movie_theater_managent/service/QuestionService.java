@@ -10,7 +10,11 @@ public interface QuestionService {
 
   QuestionResponse find(Integer id);
 
+  QuestionResponse update(Integer id, QuestionRequest request);
+
   List<QuestionResponse> findByQuizId(Integer quizId);
 
   void deleteByQuizId(Integer quizId);
+
+  void delete(Integer id);
 }

@@ -32,7 +32,7 @@ public class AnswerServiceImpl implements AnswerService {
   }
 
   @Override
-  public void deletebyQuestionId(Integer questionId) {
+  public void deleteByQuestionId(Integer questionId) {
     log.info("delete answer by question id: {}", questionId);
 
     repository.deleteAllByQuestionId(questionId);
