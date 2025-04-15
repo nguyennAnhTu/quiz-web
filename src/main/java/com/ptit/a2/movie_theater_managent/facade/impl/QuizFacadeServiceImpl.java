@@ -26,12 +26,14 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
   @Override
   @Transactional
   public QuizResponse create(QuizRequest request) {
-    log.info("===start create quiz");
+    log.info("===start create quiz, request={}, {}, {}, {}, {}", request.getName(), request.getDescription(), request.getMediaLink(), request.getTagIds(), request.getModifier());
 
     QuizResponse quizResponse = quizService.create(request);
     for (Integer tagId : request.getTagIds()) {
       quizTagService.create(quizResponse.getId(), tagId);
     }
+
+    quizResponse.setTagIds(request.getTagIds());
 
     return quizResponse;
   }
@@ -42,8 +44,9 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
 
     QuizResponse quizResponse = quizService.find(id);
     quizResponse.setQuestions(questionService.findByQuizId(id));
+    quizResponse.setTagIds(quizTagService.getTagIds(id));
     for (QuestionResponse questionResponse : quizResponse.getQuestions()) {
-      questionResponse.setAnswerResponses(answerService.findByQuestionId(questionResponse.getId()));
+      questionResponse.setAnswer(answerService.findByQuestionId(questionResponse.getId()));
     }
 
     return quizResponse;
@@ -60,6 +63,8 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     for (Integer tagId : request.getTagIds()) {
       quizTagService.create(quizResponse.getId(), tagId);
     }
+
+    quizResponse.setTagIds(request.getTagIds());
 
     return quizResponse;
   }

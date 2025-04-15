@@ -6,6 +6,8 @@ import com.ptit.a2.movie_theater_managent.service.QuizTagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 public class QuizTagServiceImpl implements QuizTagService {
@@ -23,5 +25,12 @@ public class QuizTagServiceImpl implements QuizTagService {
     log.info("delete quiz tag");
 
     repository.deleteAllByQuizId(quizId);
+  }
+
+  @Override
+  public List<Integer> getTagIds(Integer quizId) {
+    log.info("getTagIds quizId: {}", quizId);
+
+    return repository.findTagIdsByQuizId(quizId);
   }
 }
