@@ -22,7 +22,7 @@ public class QuestionResponse {
   private Integer quizId;
   private Integer time;
   private Integer questionOrder;
-  private List<AnswerResponse> answerResponses;
+  private List<AnswerResponse> answer;
 
   public static QuestionResponse of(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time, Integer order) {
     return new QuestionResponse(id, content, mediaLink, funFact, quizId, time, order);

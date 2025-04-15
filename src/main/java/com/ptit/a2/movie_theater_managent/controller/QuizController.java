@@ -29,7 +29,7 @@ public class QuizController {
 
     return ResponseGeneral.ofCreated(
           SUCCESS,
-          quizService.create(request)
+          quizFacadeService.create(request)
     );
   }
 

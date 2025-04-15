@@ -76,6 +76,7 @@ public class QuizServiceImpl implements QuizService {
           quiz.getModifier(),
           quiz.getRating(),
           quiz.getCreatedBy(),
+          null,
           null
     );
   }

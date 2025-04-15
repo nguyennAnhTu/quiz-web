@@ -44,7 +44,7 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
     log.info("===start find question request: {}", id);
 
     QuestionResponse questionResponse = questionService.find(id);
-    questionResponse.setAnswerResponses(
+    questionResponse.setAnswer(
           answerService.findByQuestionId(questionResponse.getId())
     );
 

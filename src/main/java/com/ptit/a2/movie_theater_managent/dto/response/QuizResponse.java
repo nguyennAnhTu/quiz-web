@@ -23,4 +23,5 @@ public class QuizResponse {
   private Double rating;
   private Integer creatorId;
   private List<QuestionResponse> questions;
+  private List<Integer> tagIds;
 }
