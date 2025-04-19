@@ -5,6 +5,7 @@ import com.ptit.a2.movie_theater_managent.repository.QuizTagRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizTagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class QuizTagServiceImpl implements QuizTagService {
   }
 
   @Override
+  @Transactional
   public void delete(Integer quizId) {
     log.info("delete quiz tag");
 
@@ -32,5 +34,12 @@ public class QuizTagServiceImpl implements QuizTagService {
     log.info("getTagIds quizId: {}", quizId);
 
     return repository.findTagIdsByQuizId(quizId);
+  }
+
+  @Override
+  public List<Integer> getQuizIds(Integer tagId) {
+    log.info("getTagIds tagId: {}", tagId);
+
+    return repository.findQuizIdsByTagId(tagId);
   }
 }

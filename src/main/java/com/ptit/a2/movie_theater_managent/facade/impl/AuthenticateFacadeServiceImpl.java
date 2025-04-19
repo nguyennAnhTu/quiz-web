@@ -6,7 +6,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.LoginRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.LoginResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
-import com.ptit.a2.movie_theater_managent.exception.base.authenticate.PasswordIncorrectException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.PasswordIncorrectException;
 import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
 import com.ptit.a2.movie_theater_managent.service.JwtTokenService;
 import com.ptit.a2.movie_theater_managent.service.TokenRedisService;

@@ -61,6 +61,7 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
   }
 
   @Override
+  @Transactional
   public QuestionResponse update(Integer id, QuestionRequest questionRequest) {
     if (!quizService.exist(questionRequest.getQuizId())) {
       throw new QuizNotFoundException();
