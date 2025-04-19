@@ -1,12 +1,19 @@
 package com.ptit.a2.movie_theater_managent.facade.impl;
 
+import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
 import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +92,17 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     questionService.deleteByQuizId(id);
     quizTagService.delete(id);
     quizService.delete(id);
+  }
+
+  @Override
+  public List<QuizProjection> list(Integer tagId, Integer page, Integer size) {
+    log.info("===start list quiz tagId: {}", tagId);
+
+    List<Integer> quizIds = quizTagService.getQuizIds(tagId);
+    if (quizIds.isEmpty()) {
+      return null;
+    }
+
+    return quizService.findByIdIn(quizIds);
   }
 }

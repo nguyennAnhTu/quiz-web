@@ -1,6 +1,7 @@
 package com.ptit.a2.movie_theater_managent.service.impl;
 
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
 import com.ptit.a2.movie_theater_managent.exception.quiz.QuizNotFoundException;
@@ -8,8 +9,12 @@ import com.ptit.a2.movie_theater_managent.repository.QuizRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
@@ -18,6 +23,7 @@ import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCu
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
   private final QuizRepository repository;
+  private static final List<String> VALID_SORT_FIELDS = List.of("name", "createdAt", "rating");
 
   @Override
   @Transactional
@@ -65,6 +71,41 @@ public class QuizServiceImpl implements QuizService {
   @Override
   public boolean exist(Integer id) {
     return repository.existsById(id);
+  }
+
+  @Override
+  public List<QuizProjection> findByIdIn(List<Integer> ids) {
+
+    return repository.findByIdIn(ids);
+  }
+
+  @Override
+  public List<QuizProjection> findByCreatedBy(Integer modifier) {
+    Integer userId = getCurrentUserId();
+    log.info("(findByCreatedBy) findQuiz request: {}", userId);
+
+    return repository.findByCreatedBy(userId, modifier);
+  }
+
+  @Override
+  public List<QuizProjection> findByKeyword(String keyword, String sortBy, String order) {
+    log.info("(findByKeyword) findQuiz request: {}", keyword);
+
+    List<QuizProjection> quizzes = repository.findAllByKeyword(keyword);
+    Comparator<QuizProjection> comparator = switch (sortBy) {
+      case "name" -> Comparator.comparing(QuizProjection::getName, String.CASE_INSENSITIVE_ORDER);
+      case "createdAt" -> Comparator.comparing(QuizProjection::getCreatedAt);
+      case "rating" -> Comparator.comparing(QuizProjection::getRating);
+      default -> Comparator.comparing(QuizProjection::getId); // fallback
+    };
+
+    if ("desc".equalsIgnoreCase(order)) {
+      comparator = comparator.reversed();
+    }
+
+    quizzes.sort(comparator);
+
+    return quizzes;
   }
 
   private QuizResponse toDTO(Quiz quiz) {
