@@ -13,6 +13,8 @@ public interface UserService {
 
   User findByEmail(String email);
 
+  User getById(Integer userId);
+
   UserResponse update(Integer id, UserUpdateRequest request);
 
   UserResponse detail(Integer id);

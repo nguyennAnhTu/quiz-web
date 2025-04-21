@@ -10,4 +10,7 @@
     <include file="db/changelog/20250330-1115-create-table-quiz-tag.xml"/>
     <include file="db/changelog/20250331-1652-create-table-questions.xml"/>
     <include file="db/changelog/20250331-1655-create-table-answers.xml"/>
+    <include file="db/changelog/20250421-2256-create-table-quiz-sessions.xml"/>
+    <include file="db/changelog/20250421-2302-create-table-quiz-session-answers.xml"/>
+    <include file="db/changelog/20250421-2312-create-table-quiz-session-participants.xml"/>
 </databaseChangeLog>

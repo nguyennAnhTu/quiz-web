@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public User getById(Integer userId) {
+    return repository.findById(userId).orElseThrow(UserNotFoundException::new);
+  }
+
+  @Override
   public UserResponse update(Integer id, UserUpdateRequest request) {
     log.info("(update) id:{}, request:{}", id, request);
 
