@@ -17,21 +17,21 @@ import java.util.List;
 public class QuestionResponse {
   private Integer id;
   private String content;
-  private String mediaLink;
+  private MediaResponse media;
   private String funFact;
   private Integer quizId;
   private Integer time;
   private Integer questionOrder;
   private List<AnswerResponse> answer;
 
-  public static QuestionResponse of(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time, Integer order) {
-    return new QuestionResponse(id, content, mediaLink, funFact, quizId, time, order);
+  public static QuestionResponse of(Integer id, String content, MediaResponse media, String funFact, Integer quizId, Integer time, Integer order) {
+    return new QuestionResponse(id, content, media, funFact, quizId, time, order);
   }
 
-  private QuestionResponse(Integer id, String content, String mediaLink, String funFact, Integer quizId, Integer time, Integer questionOrder) {
+  private QuestionResponse(Integer id, String content, MediaResponse media, String funFact, Integer quizId, Integer time, Integer questionOrder) {
     this.id = id;
     this.content = content;
-    this.mediaLink = mediaLink;
+    this.media = media;
     this.funFact = funFact;
     this.quizId = quizId;
     this.time = time;

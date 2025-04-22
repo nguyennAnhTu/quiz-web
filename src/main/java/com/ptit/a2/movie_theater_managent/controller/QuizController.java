@@ -74,15 +74,13 @@ public class QuizController {
 
   @GetMapping("/by-tag")
   public ResponseGeneral<List<QuizProjection>> list(
-        @RequestParam Integer tagId,
-        @RequestParam(defaultValue = "0") Integer page,
-        @RequestParam(defaultValue = "12") Integer size
+        @RequestParam Integer tagId
   ) {
     log.info("===start list quizzes");
 
     return ResponseGeneral.ofSuccess(
           SUCCESS,
-          quizFacadeService.list(tagId, page, size)
+          quizFacadeService.list(tagId)
     );
   }
 

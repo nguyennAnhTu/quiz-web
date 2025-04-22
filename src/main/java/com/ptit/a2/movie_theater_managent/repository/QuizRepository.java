@@ -16,14 +16,14 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
 
   @Query("SELECT q.id AS id," +
         " q.name AS name," +
-        " q.mediaLink AS mediaLink," +
+        " q.mediaId AS mediaId," +
         " q.createdBy AS createdBy, q.rating AS rating from Quiz q" +
         " WHERE (:ids IS NULL OR q.id in :ids) AND q.modifier = 1")
   List<QuizProjection> findByIdIn(@Param("ids") List<Integer> ids);
 
   @Query("SELECT q.id AS id," +
         " q.name AS name," +
-        " q.mediaLink AS mediaLink," +
+        " q.mediaId AS mediaId," +
         " q.createdBy AS createdBy, q.createdAt AS createdAt, q.rating AS rating from Quiz q" +
         " WHERE q.createdBy=:createdBy AND (:modifier is NULL or q.modifier = :modifier)")
   List<QuizProjection> findByCreatedBy(
@@ -34,7 +34,7 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
   @Query("""
   SELECT q.id AS id,
          q.name AS name,
-         q.mediaLink AS mediaLink,
+         q.mediaId AS mediaId,
          q.createdBy AS createdBy,
          q.rating AS rating,
          q.createdAt AS createdAt
