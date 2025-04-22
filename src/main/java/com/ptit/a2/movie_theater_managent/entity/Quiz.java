@@ -17,18 +17,18 @@ import lombok.Setter;
 public class Quiz extends AuditEntity {
   private String name;
   private String description;
-  private String mediaLink;
+  private Integer mediaId;
   private Integer modifier;
   private Double rating = 0.0;
 
-  private Quiz (String name, String description, String mediaLink, Integer modifier) {
+  private Quiz (String name, String description, Integer mediaId, Integer modifier) {
     this.name = name;
     this.description = description;
-    this.mediaLink = mediaLink;
+    this.mediaId = mediaId;
     this.modifier = modifier;
   }
 
-  public static Quiz of(String name, String description, String mediaLink, Integer modifier) {
-    return new Quiz(name, description, mediaLink, modifier);
+  public static Quiz of(String name, String description, Integer mediaId, Integer modifier) {
+    return new Quiz(name, description, mediaId, modifier);
   }
 }

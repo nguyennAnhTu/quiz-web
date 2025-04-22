@@ -12,7 +12,7 @@ public interface QuizFacadeService {
 
   QuizResponse find(Integer id);
 
-  List<QuizProjection> list(Integer tagId, Integer page, Integer size);
+  List<QuizProjection> list(Integer tagId);
 
   QuizResponse update(Integer id, QuizRequest request);
 

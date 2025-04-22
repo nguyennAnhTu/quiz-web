@@ -27,12 +27,12 @@ public class QuizServiceImpl implements QuizService {
 
   @Override
   @Transactional
-  public QuizResponse create(QuizRequest request) {
+  public QuizResponse create(QuizRequest request, Integer mediaId) {
     log.info("(create) createQuiz request: {}", request);
       Quiz quiz = Quiz.of(
             request.getName(),
             request.getDescription(),
-            request.getMediaLink(),
+            mediaId,
             request.getModifier()
       );
 
@@ -41,23 +41,17 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  public QuizResponse find(Integer id) {
+  public Quiz find(Integer id) {
     log.info("(find) findQuiz request: {}", id);
 
-    return this.toDTO(this.get(id));
+    return this.get(id);
   }
 
   @Override
-  public QuizResponse update(Integer id, QuizRequest request) {
-    log.info("(update) updateQuiz request: {}", request);
+  public Quiz update(Quiz quiz) {
+    log.info("(update) updateQuiz quiz: {}", quiz);
 
-    Quiz quiz = this.get(id);
-    quiz.setName(request.getName());
-    quiz.setDescription(request.getDescription());
-    quiz.setMediaLink(request.getMediaLink());
-    quiz.setModifier(request.getModifier());
-
-    return this.toDTO(repository.save(quiz));
+    return repository.save(quiz);
   }
 
   @Override
@@ -71,6 +65,17 @@ public class QuizServiceImpl implements QuizService {
   @Override
   public boolean exist(Integer id) {
     return repository.existsById(id);
+  }
+
+  @Override
+  public Integer findMediaId(Integer id) {
+    log.info("(findMediaId) quiz id request: {}", id);
+
+    Quiz quiz = this.get(id);
+    if (quiz.getMediaId() != null) {
+      return quiz.getMediaId();
+    }
+    return null;
   }
 
   @Override
@@ -113,7 +118,7 @@ public class QuizServiceImpl implements QuizService {
           quiz.getId(),
           quiz.getName(),
           quiz.getDescription(),
-          quiz.getMediaLink(),
+          null,
           quiz.getModifier(),
           quiz.getRating(),
           quiz.getCreatedBy(),
