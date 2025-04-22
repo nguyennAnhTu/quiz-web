@@ -9,6 +9,8 @@ import com.ptit.a2.movie_theater_managent.entity.QuizSession;
 public interface QuizSessionService {
   QuizSessionResponse create(QuizSessionCreateRequest request);
 
+  void save(QuizSession quizSession);
+
   QuizSession findById(Integer id);
 
   QuizSessionResponse update(Integer id, QuizSessionUpdateRequest request);

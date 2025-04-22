@@ -90,7 +90,7 @@ public class QuizSessionController {
 
   @PostMapping("/{quizSessionId}/join")
   public ResponseGeneral<String> joinQuiz(
-        @PathVariable("quizSessionId") Integer quizSessionId,
+        @PathVariable("quizSessionId") Integer quizSessionId
   ) {
     log.info("Start joinQuiz - quizSessionId: {}", quizSessionId);
 
@@ -98,6 +98,45 @@ public class QuizSessionController {
     return ResponseGeneral.ofSuccess(
           SUCCESS,
           "User joined quiz session successfully"
+    );
+  }
+
+  @PostMapping("/{quizSessionId}/start")
+  public ResponseGeneral<Void> startQuiz(
+        @PathVariable("quizSessionId") Integer quizSessionId
+  ) {
+    log.info("Start startQuiz - quizSessionId: {}", quizSessionId);
+
+    quizSessionFacadeService.startQuiz(quizSessionId);
+    return ResponseGeneral.ofSuccess(
+          SUCCESS
+    );
+  }
+
+  // Tạm dừng quiz session
+  @PostMapping("/{quizSessionId}/pause")
+  public ResponseGeneral<Void> pauseQuiz(
+        @PathVariable("quizSessionId") Integer quizSessionId
+  ) {
+    log.info("Start pauseQuiz - quizSessionId: {}", quizSessionId);
+
+    quizSessionFacadeService.pauseQuiz(quizSessionId);
+    return ResponseGeneral.ofSuccess(
+          SUCCESS
+    );
+  }
+
+  // Kết thúc quiz session
+  @PostMapping("/{quizSessionId}/end")
+  public ResponseGeneral<Void> endQuiz(
+        @PathVariable("quizSessionId") Integer quizSessionId,
+        @RequestParam(required = false) String reason
+  ) {
+    log.info("Start endQuiz - quizSessionId: {}, reason: {}", quizSessionId, reason);
+
+    quizSessionFacadeService.endQuiz(quizSessionId, reason);
+    return ResponseGeneral.ofSuccess(
+          SUCCESS
     );
   }
 }

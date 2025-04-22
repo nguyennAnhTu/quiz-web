@@ -20,49 +20,48 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketServiceImpl extends TextWebSocketHandler implements WebSocketService {
   private final SimpMessagingTemplate simpMessagingTemplate;
 
-  // Quản lý các WebSocket session theo username
-  private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+  // Quản lý các WebSocket session theo userId
+  private final Map<Integer, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
   @Override
   public void afterConnectionEstablished(@NonNull WebSocketSession session) {
-    String username = getUsernameFromSession(session);
-    sessions.put(username, session);  // Lưu phiên của user vào map
+    Integer userId = getUserIdFromSession(session);
+    sessions.put(userId, session); // Lưu phiên của user vào map
   }
 
   @Override
   public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
-    String username = getUsernameFromSession(session);
-    sessions.remove(username);  // Xóa phiên khi người dùng đóng kết nối
+    Integer userId = getUserIdFromSession(session);
+    sessions.remove(userId); // Xóa phiên khi người dùng đóng kết nối
   }
 
   @Override
-  public void sendMessageToUser(String username, Object message) {
-    simpMessagingTemplate.convertAndSendToUser(username, "/queue/messages", message);
+  public void sendMessageToUser(Integer userId, Object message) {
+    simpMessagingTemplate.convertAndSendToUser(userId.toString(), "/queue/messages", message);
   }
 
-  // Gửi tin nhắn đến nhiều người dùng theo danh sách username
   @Override
-  public void sendMessageToUsers(Collection<String> usernames, Object message) {
-    for (String username : usernames) {
-//      NotificationsDto notificationsDto = (NotificationsDto) message;
-//      notificationsDto.setId(notificationsDto.getMapReceiverNotificationId().get(username));
-      sendMessageToUser(username, null);
+  public void sendMessageToUsers(Collection<Integer> userIds, Object message) {
+    for (Integer userId : userIds) {
+      sendMessageToUser(userId, message);
     }
   }
 
   @Override
   @MessageMapping("/{topic}")
   public void sendMessage(String topic, Object message) {
-    simpMessagingTemplate.convertAndSend(topic, message);
+    simpMessagingTemplate.convertAndSend("/topic/" + topic, message);
   }
 
-  private String getUsernameFromSession(WebSocketSession session) {
+  private Integer getUserIdFromSession(WebSocketSession session) {
     Principal principal = session.getPrincipal();
-
     if (principal != null) {
-      return principal.getName();
+      try {
+        return Integer.parseInt(principal.getName()); // Giả định principal.getName() chứa userId dạng String
+      } catch (NumberFormatException e) {
+        throw new IllegalStateException("Invalid user ID format in Principal: " + principal.getName());
+      }
     }
-
     throw new IllegalStateException("User is not authenticated or Principal is null.");
   }
 }

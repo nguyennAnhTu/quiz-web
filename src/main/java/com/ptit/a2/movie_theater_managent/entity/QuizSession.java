@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class QuizSession  extends AuditEntity {
+public class QuizSession extends AuditEntity {
   @Column(name = "quiz_id")
   private Integer quizId;
 
@@ -29,8 +29,9 @@ public class QuizSession  extends AuditEntity {
   @Column(name = "start_time")
   private Long startTime;
 
-  @Column(name = "end_time")
-  private Long endTime;
+  @Column(name = "duration")
+  private Long duration; // Thời lượng quiz (phút)
+
   public enum Status {
     WAITING,    // Đang chờ
     STARTED,    // Đang diễn ra

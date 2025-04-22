@@ -9,7 +9,6 @@ import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundE
 import com.ptit.a2.movie_theater_managent.exception.quiz_session.SessionCodeExistedException;
 import com.ptit.a2.movie_theater_managent.repository.QuizSessionRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizSessionService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.BLANK;
-
-import static com.ptit.a2.movie_theater_managent.utils.DateUtils.convertDateToLong;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,12 +38,17 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     quizSession.setSessionCode(request.sessionCode());
     quizSession.setStatus(QuizSession.Status.valueOf(request.status()));
     quizSession.setCurrentQuestionId(request.currentQuestionId());
-    quizSession.setStartTime(convertDateToLong(request.startTime()));
-    quizSession.setEndTime(convertDateToLong(request.endTime()));
+    quizSession.setDuration(request.duration()); // Lưu duration
 
     repository.save(quizSession);
 
     return this.toDTO(quizSession);
+  }
+
+  @Override
+  @Transactional
+  public void save(QuizSession quizSession) {
+    repository.save(quizSession);
   }
 
   @Override
@@ -95,7 +97,7 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     } else {
       Page<QuizSessionResponse> responses = repository.list(
             keyword == null ? BLANK : keyword,
-           PageRequest.of(page,size)
+            PageRequest.of(page, size)
       );
 
       return PageResponse.of(responses.getContent(), (int) responses.getTotalElements());
@@ -113,14 +115,11 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     if (request.status() != null) {
       quizSession.setStatus(QuizSession.Status.valueOf(request.status()));
     }
-    if (request.currentQuestionId() != null) {
-      quizSession.setCurrentQuestionId(request.currentQuestionId());
-    }
-    if (request.startTime() != null) {
-      quizSession.setStartTime(convertDateToLong(request.startTime()));
-    }
-    if (request.endTime() != null) {
-      quizSession.setEndTime(convertDateToLong(request.endTime()));
+
+    quizSession.setCurrentQuestionId(request.currentQuestionId());
+
+    if (request.duration() != null) {
+      quizSession.setDuration(request.duration());
     }
   }
 
@@ -132,7 +131,7 @@ public class QuizSessionServiceImpl implements QuizSessionService {
           quizSession.getStatus(),
           quizSession.getCurrentQuestionId(),
           quizSession.getStartTime(),
-          quizSession.getEndTime(),
+          quizSession.getDuration(),
           quizSession.getCreatedBy(),
           quizSession.getCreatedAt(),
           quizSession.getLastUpdatedBy(),

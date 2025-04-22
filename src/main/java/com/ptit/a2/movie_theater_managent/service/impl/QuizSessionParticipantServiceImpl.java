@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,5 +27,10 @@ public class QuizSessionParticipantServiceImpl implements QuizSessionParticipant
   public boolean existsBySessionIdAndUserId(Integer sessionId, Integer userId) {
     log.info("(existsBySessionIdAndUserId) sessionId: {}, userId: {}", sessionId, userId);
     return repository.existsBySessionIdAndUserId(sessionId, userId);
+  }
+
+  @Override
+  public List<QuizSessionParticipant> findBySessionId(Integer quizSessionId) {
+    return repository.findBySessionId(quizSessionId);
   }
 }

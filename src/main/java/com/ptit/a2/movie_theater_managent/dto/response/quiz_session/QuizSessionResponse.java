@@ -2,9 +2,6 @@ package com.ptit.a2.movie_theater_managent.dto.response.quiz_session;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
-
-
 import com.ptit.a2.movie_theater_managent.entity.QuizSession;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -15,7 +12,7 @@ public record QuizSessionResponse(
       QuizSession.Status status,
       Integer currentQuestionId,
       Long startTime,
-      Long endTime,
+      Long duration,
       Integer createdBy,
       Long createdAt,
       Integer lastUpdatedBy,
@@ -28,7 +25,7 @@ public record QuizSessionResponse(
         QuizSession.Status status,
         Integer currentQuestionId,
         Long startTime,
-        Long endTime,
+        Long duration,
         Integer createdBy,
         Long createdAt,
         Integer lastUpdatedBy,
@@ -36,7 +33,7 @@ public record QuizSessionResponse(
   ) {
     return new QuizSessionResponse(
           id, quizId, sessionCode, status, currentQuestionId,
-          startTime, endTime, createdBy, createdAt, lastUpdatedBy, lastUpdatedAt
+          startTime, duration, createdBy, createdAt, lastUpdatedBy, lastUpdatedAt
     );
   }
 }
