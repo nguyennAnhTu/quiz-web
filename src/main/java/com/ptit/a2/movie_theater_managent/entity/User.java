@@ -18,7 +18,7 @@ public class User extends AuditEntity {
   private String email;
   private String password;
   private String username;
-  private String profilePictureLink;
+  private Integer mediaId;
   private Boolean isAdmin;
 
   public static User of(String email, String password, String username, Boolean isAdmin) {

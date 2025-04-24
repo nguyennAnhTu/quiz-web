@@ -21,4 +21,19 @@
             <column name="last_updated_at"  type="bigint"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="20250424-2010-drop-column-profile-picture-link" author="tuna">
+        <dropColumn tableName="users" columnName="profile_picture_link"/>
+
+        <addColumn tableName="users">
+            <column name="media_id" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="users"
+                baseColumnNames="media_id"
+                constraintName="fk_user_media"
+                referencedTableName="medias"
+                referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>           
