@@ -35,6 +35,9 @@ public class MovieTheaterConstants {
     public static final String GENRE_NOT_FOUND = "genre not found";
     public static final String QUIZ_NOT_FOUND = "quiz not found";
     public static final String QUESTION_NOT_FOUND = "question not found";
+    public static final String INVALID_OTP = "invalid otp";
+    public static final String MAX_OTP_ATTEMPTS = "max otp attempts";
+    public static final String MAX_RESEND_OTP_ATTEMPTS = "max resneted otp attempts";
   }
 
 

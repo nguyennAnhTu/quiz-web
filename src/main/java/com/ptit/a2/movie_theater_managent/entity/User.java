@@ -20,6 +20,7 @@ public class User extends AuditEntity {
   private String username;
   private Integer mediaId;
   private Boolean isAdmin;
+  private Boolean isActive = false;
 
   public static User of(String email, String password, String username, Boolean isAdmin) {
     return new User(email, password, username, isAdmin);

@@ -36,4 +36,10 @@
                 referencedTableName="medias"
                 referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet id="20250424-2010-add-is-active-to-table-users" author="tuna">
+        <addColumn tableName="users">
+            <column name="is_active" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>           

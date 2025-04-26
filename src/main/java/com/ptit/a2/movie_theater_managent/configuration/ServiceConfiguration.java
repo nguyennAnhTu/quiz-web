@@ -15,8 +15,8 @@ public class ServiceConfiguration {
   }
 
   @Bean
-  public UserService userService(UserRepository userRepository) {
-    return new UserServiceImpl(userRepository);
+  public UserService userService(UserRepository userRepository, MediaService mediaService) {
+    return new UserServiceImpl(userRepository, mediaService);
   }
 
   @Bean

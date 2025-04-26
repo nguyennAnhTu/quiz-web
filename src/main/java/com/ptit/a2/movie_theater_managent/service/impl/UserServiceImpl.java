@@ -13,6 +13,7 @@ import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundE
 import com.ptit.a2.movie_theater_managent.exception.authentication.UsernameExistedException;
 import com.ptit.a2.movie_theater_managent.exception.film.BadRequestException;
 import com.ptit.a2.movie_theater_managent.repository.UserRepository;
+import com.ptit.a2.movie_theater_managent.service.MediaService;
 import com.ptit.a2.movie_theater_managent.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import static com.ptit.a2.movie_theater_managent.utils.PasswordEncoderUtils.getP
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
   private final UserRepository repository;
+  private final MediaService mediaService;
 
   @Override
   @Transactional
@@ -46,10 +48,8 @@ public class UserServiceImpl implements UserService {
     repository.save(user);
 
     return AuthRegisterResponse.of(
-          user.getId(),
           user.getEmail(),
-          user.getUsername(),
-          user.getIsAdmin()
+          user.getUsername()
     );
   }
 
@@ -128,6 +128,49 @@ public class UserServiceImpl implements UserService {
     repository.save(user);
   }
 
+  @Override
+  @Transactional
+  public void createInactiveUser(AuthRegisterRequest request, Integer mediaId) {
+    log.info("(createInactiveUser) request: {}", request);
+
+    this.checkEmailExists(request.getEmail());
+
+    User user = User.of(
+          request.getEmail(),
+          getPasswordEncoder().encode(request.getPassword()),
+          request.getUsername(),
+          request.getIsAdmin()
+    );
+
+    user.setMediaId(mediaId);
+
+    repository.save(user);
+  }
+
+  @Override
+  public void activeUser(String email) {
+    log.info("(activeUser) email: {}", email);
+
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+    if (Boolean.TRUE.equals(user.getIsActive())) {
+      throw new EmailExistedException();
+    }
+
+    user.setIsActive(true);
+    repository.save(user);
+  }
+
+  @Override
+  public void deleteInactiveUser(String email) {
+    log.info("(deleteInactiveUser) email: {}", email);
+
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    Integer mediaId = user.getMediaId();
+
+    repository.delete(user);
+    mediaService.delete(mediaId);
+  }
 
   private User find(Integer id) {
     return repository.findById(id).orElseThrow(UserNotFoundException::new);
@@ -153,7 +196,7 @@ public class UserServiceImpl implements UserService {
   }
 
   private void checkUsernameExists(String username) {
-    if(Boolean.TRUE.equals(repository.existsByUsername(username))) {
+    if (Boolean.TRUE.equals(repository.existsByUsername(username))) {
       throw new UsernameExistedException();
     }
   }
