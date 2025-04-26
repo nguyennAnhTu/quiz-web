@@ -3,12 +3,14 @@ package com.ptit.a2.movie_theater_managent.controller;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.LoginRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.VerifyOtpRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.LoginResponse;
 import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,5 +57,18 @@ public class AuthenticateController {
     authenticateFacadeService.logout();
 
     return ResponseGeneral.ofSuccess(SUCCESS);
+  }
+
+  @PostMapping("/verify-otp")
+  public ResponseGeneral<AuthRegisterResponse> verifyOtp(
+        @RequestBody VerifyOtpRequest request
+  ) {
+    log.info("===start verifyOtp");
+
+    return ResponseGeneral.of(
+          HttpStatus.OK.value(),
+          SUCCESS,
+          authenticateFacadeService.verifyOtp(request)
+    );
   }
 }

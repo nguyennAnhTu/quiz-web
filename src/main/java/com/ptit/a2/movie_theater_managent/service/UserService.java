@@ -22,4 +22,10 @@ public interface UserService {
   PageResponse<UserResponse> list(String keyword, int page, int size, boolean isAll);
 
   void changePassword(Integer id, ChangePasswordRequest request);
+
+  void createInactiveUser(AuthRegisterRequest request, Integer mediaId);
+
+  void activeUser(String email);
+
+  void deleteInactiveUser(String email);
 }
