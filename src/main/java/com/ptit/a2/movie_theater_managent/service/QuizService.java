@@ -1,6 +1,7 @@
 package com.ptit.a2.movie_theater_managent.service;
 
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
@@ -22,7 +23,7 @@ public interface QuizService {
 
   Integer findMediaId(Integer id);
 
-  List<QuizProjection> findByIdIn(List<Integer> ids);
+  List<Quiz> findByIdIn(List<Integer> ids);
 
   List<QuizProjection> findByCreatedBy(Integer modifier);
 

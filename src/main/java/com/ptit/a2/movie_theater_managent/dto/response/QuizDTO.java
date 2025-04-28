@@ -14,23 +14,23 @@ import java.util.List;
 public class QuizDTO {
   private Integer id;
   private String name;
-  private String mediaLink;
-  private Integer createdBy;
+  private MediaResponse media;
+  private UserDTO createdBy;
   private Double rating;
   private Long createdAt;
   private List<TagResponse> tags;
 
-  private QuizDTO (Integer id, String name, String mediaLink, Integer createdBy, Double rating, Long createdAt) {
+  private QuizDTO (Integer id, String name, MediaResponse media, UserDTO createdBy, Double rating, Long createdAt) {
     this.id = id;
     this.name = name;
-    this.mediaLink = mediaLink;
+    this.media = media;
     this.createdBy = createdBy;
     this.rating = rating;
     this.createdAt = createdAt;
   }
 
-  public static QuizDTO of(Integer id, String name, String mediaLink, Integer createdBy, Double rating, Long createdAt) {
-    return new QuizDTO(id, name, mediaLink, createdBy, rating, createdAt);
+  public static QuizDTO of(Integer id, String name, MediaResponse media, UserDTO createdBy, Double rating, Long createdAt) {
+    return new QuizDTO(id, name, media, createdBy, rating, createdAt);
   }
 }
 

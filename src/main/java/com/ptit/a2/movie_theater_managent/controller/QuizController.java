@@ -3,6 +3,7 @@ package com.ptit.a2.movie_theater_managent.controller;
 import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
@@ -73,7 +74,7 @@ public class QuizController {
   }
 
   @GetMapping("/by-tag")
-  public ResponseGeneral<List<QuizProjection>> list(
+  public ResponseGeneral<List<QuizDTO>> list(
         @RequestParam Integer tagId
   ) {
     log.info("===start list quizzes");
