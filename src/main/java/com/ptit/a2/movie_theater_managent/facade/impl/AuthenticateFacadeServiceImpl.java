@@ -1,16 +1,15 @@
 package com.ptit.a2.movie_theater_managent.facade.impl;
 
 import com.ptit.a2.movie_theater_managent.constanst.enums.TokenType;
-import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
-import com.ptit.a2.movie_theater_managent.dto.request.LoginRequest;
-import com.ptit.a2.movie_theater_managent.dto.request.MediaRequest;
-import com.ptit.a2.movie_theater_managent.dto.request.VerifyOtpRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.*;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.LoginResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.MediaResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
+import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
 import com.ptit.a2.movie_theater_managent.exception.authentication.MaxOtpAttemptException;
 import com.ptit.a2.movie_theater_managent.exception.authentication.PasswordIncorrectException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundException;
 import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
 import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.AuthConstant.*;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.ACCESS_TOKEN_KEY;
@@ -48,12 +48,22 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
   public AuthRegisterResponse register(AuthRegisterRequest request) {
     log.info("(register) request: {}", request);
 
-    MediaResponse mediaResponse = mediaService.create(
-          MediaRequest.of(DEFAULT_URL_AVATAR, 1F, 0F, 0F)
-    );
+    Optional<User> userOptional = userService.find(request.getEmail());
+    if (userOptional.isEmpty()) {
+      MediaResponse mediaResponse = mediaService.create(
+            MediaRequest.of(DEFAULT_URL_AVATAR, 1F, 0F, 0F)
+      );
+      userService.createInactiveUser(request, mediaResponse.getId());
+      this.sendOtp(request.getEmail());
+    } else {
+      User user = userOptional.get();
+      if (Boolean.TRUE.equals(user.getIsActive())) {
+        throw new EmailExistedException();
+      }
 
-    userService.createInactiveUser(request, mediaResponse.getId());
-    this.sendOtp(request.getEmail());
+      userService.updateInformation(user.getId(), request.getPassword(), request.getUsername());
+      this.sendOtp(request.getEmail());
+    }
 
     return AuthRegisterResponse.of(
           request.getEmail(),
@@ -128,6 +138,29 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
       }
       throw e;
     }
+  }
+
+  @Override
+  public AuthRegisterResponse resendOtp(ResendOtpRequest request) {
+    log.info("(resendOtp) email: {}", request.getEmail());
+
+    // Kiểm tra tài khoản inactive
+    userService.findUserByEmail(request.getEmail());
+
+    // Kiểm tra giới hạn gửi lại OTP
+    otpService.checkResendLimit(request.getEmail());
+
+    // Xóa OTP cũ
+    otpService.clearOtpData(request.getEmail());
+
+    // Tạo và gửi OTP mới
+    String otp = otpService.generateOtp(request.getEmail());
+    emailService.sendOtpEmail(request.getEmail(), otp);
+
+    return AuthRegisterResponse.of(
+          request.getEmail(),
+          OTP_SENT_MESSAGE
+    );
   }
 
   private void equalPassword(String passwordRaw, String passwordEncrypted) {

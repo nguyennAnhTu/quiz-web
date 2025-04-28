@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -66,6 +67,20 @@ public class UserServiceImpl implements UserService {
     }
 
     return user;
+  }
+
+  @Override
+  public void findUserByEmail(String email) {
+    log.info("(findUserByEmail), email: {}", email);
+
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+  }
+
+  @Override
+  public Optional<User> find(String email) {
+    log.info("(find), email: {}", email);
+
+    return repository.findByEmail(email);
   }
 
   @Override
@@ -169,6 +184,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void deleteInactiveUser(String email) {
     log.info("(deleteInactiveUser) email: {}", email);
 
@@ -187,6 +203,16 @@ public class UserServiceImpl implements UserService {
           user.getId(),
           user.getUsername()
     );
+  }
+
+  @Override
+  public void updateInformation(Integer id, String password, String username) {
+    log.info("(updatePassword) id:{}, password: {}", id, password);
+
+    User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+    user.setPassword(getPasswordEncoder().encode(password));
+    user.setUsername(username);
+    repository.save(user);
   }
 
   private User find(Integer id) {

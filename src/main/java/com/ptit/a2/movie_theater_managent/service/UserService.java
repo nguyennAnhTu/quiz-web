@@ -9,6 +9,8 @@ import com.ptit.a2.movie_theater_managent.dto.response.UserDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 
+import java.util.Optional;
+
 public interface UserService {
   AuthRegisterResponse create(AuthRegisterRequest request);
 
@@ -31,4 +33,10 @@ public interface UserService {
   void deleteInactiveUser(String email);
 
   UserDTO get(Integer id);
+
+  void findUserByEmail(String email);
+
+  Optional<User> find(String email);
+
+  void updateInformation(Integer id, String password, String username);
 }
