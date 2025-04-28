@@ -5,6 +5,7 @@ import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
+import com.ptit.a2.movie_theater_managent.entity.User;
 import com.ptit.a2.movie_theater_managent.exception.quiz.QuizNotFoundException;
 import com.ptit.a2.movie_theater_managent.repository.QuizRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
@@ -44,6 +45,7 @@ public class QuizServiceImpl implements QuizService {
   @Override
   public Quiz find(Integer id) {
     log.info("(find) findQuiz request: {}", id);
+
 
     return this.get(id);
   }
@@ -116,9 +118,10 @@ public class QuizServiceImpl implements QuizService {
 
   private Quiz get(Integer id) {
     Integer userId = getCurrentUserId();
+    log.info("userId: {}", userId);
 
     Quiz quiz = repository.findById(id).orElseThrow(QuizNotFoundException::new);
-    if (quiz.getModifier()==0 && !Objects.equals(userId, quiz.getCreatedBy())) {
+    if (((userId == null) || !Objects.equals(userId, quiz.getCreatedBy())) && quiz.getModifier() != 1) {
       throw new QuizNotFoundException();
     }
 
