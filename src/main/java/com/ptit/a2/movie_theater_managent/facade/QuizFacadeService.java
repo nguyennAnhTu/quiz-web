@@ -2,6 +2,7 @@ package com.ptit.a2.movie_theater_managent.facade;
 
 import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 
@@ -12,7 +13,7 @@ public interface QuizFacadeService {
 
   QuizResponse find(Integer id);
 
-  List<QuizProjection> list(Integer tagId);
+  List<QuizDTO> list(Integer tagId);
 
   QuizResponse update(Integer id, QuizRequest request);
 

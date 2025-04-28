@@ -5,6 +5,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.ChangePasswordRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.UserUpdateRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.UserDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.BLANK;
 import static com.ptit.a2.movie_theater_managent.utils.PasswordEncoderUtils.getPasswordEncoder;
@@ -57,8 +59,13 @@ public class UserServiceImpl implements UserService {
   public User findByEmail(String email) {
     log.info("(findByEmail) request: {}", email);
 
-    return repository.findByEmail(email)
-          .orElseThrow(UserNotFoundException::new);
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+    if (Boolean.TRUE.equals(!user.getIsActive())) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
   }
 
   @Override
@@ -170,6 +177,16 @@ public class UserServiceImpl implements UserService {
 
     repository.delete(user);
     mediaService.delete(mediaId);
+  }
+
+  @Override
+  public UserDTO get(Integer id) {
+    User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+
+    return UserDTO.of(
+          user.getId(),
+          user.getUsername()
+    );
   }
 
   private User find(Integer id) {

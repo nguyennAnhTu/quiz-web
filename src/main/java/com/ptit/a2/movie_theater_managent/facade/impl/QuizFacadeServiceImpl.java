@@ -1,10 +1,7 @@
 package com.ptit.a2.movie_theater_managent.facade.impl;
 
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
-import com.ptit.a2.movie_theater_managent.dto.response.MediaResponse;
-import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
-import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
-import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.*;
 import com.ptit.a2.movie_theater_managent.entity.Question;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
@@ -14,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +157,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
   }
 
   @Override
-  public List<QuizProjection> list(Integer tagId) {
+  public List<QuizDTO> list(Integer tagId) {
     log.info("===start list quiz tagId: {}", tagId);
 
     List<Integer> quizIds = quizTagService.getQuizIds(tagId);
@@ -167,7 +165,20 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
       return Collections.emptyList();
     }
 
-    return quizService.findByIdIn(quizIds);
+    List<Quiz> quizzes = quizService.findByIdIn(quizIds);
+    List<QuizDTO> quizDTOS = new ArrayList<>();
+
+    for (Quiz quiz : quizzes) {
+      QuizDTO quizDTO = this.toDto(quiz);
+
+      quizDTO.setCreatedBy(userService.get(quiz.getCreatedBy()));
+      if (quiz.getMediaId() != null) {
+        quizDTO.setMedia(mediaService.find(quiz.getMediaId()));
+      }
+      quizDTOS.add(quizDTO);
+    }
+
+    return quizDTOS;
   }
 
   private QuizResponse toDTO(Quiz quiz) {
@@ -193,6 +204,17 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
           question.getQuizId(),
           question.getTime(),
           question.getQuestionOrder()
+    );
+  }
+
+  private QuizDTO toDto(Quiz quiz) {
+    return QuizDTO.of(
+          quiz.getId(),
+          quiz.getName(),
+          null,
+          null,
+          quiz.getRating(),
+          quiz.getCreatedAt()
     );
   }
 }

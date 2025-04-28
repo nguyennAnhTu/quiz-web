@@ -5,6 +5,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.ChangePasswordRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.UserUpdateRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.UserDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 
@@ -28,4 +29,6 @@ public interface UserService {
   void activeUser(String email);
 
   void deleteInactiveUser(String email);
+
+  UserDTO get(Integer id);
 }

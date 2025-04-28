@@ -1,6 +1,7 @@
 package com.ptit.a2.movie_theater_managent.service.impl;
 
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
@@ -79,7 +80,7 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  public List<QuizProjection> findByIdIn(List<Integer> ids) {
+  public List<Quiz> findByIdIn(List<Integer> ids) {
 
     return repository.findByIdIn(ids);
   }
@@ -96,21 +97,7 @@ public class QuizServiceImpl implements QuizService {
   public List<QuizProjection> findByKeyword(String keyword, String sortBy, String order) {
     log.info("(findByKeyword) findQuiz request: {}", keyword);
 
-    List<QuizProjection> quizzes = repository.findAllByKeyword(keyword);
-    Comparator<QuizProjection> comparator = switch (sortBy) {
-      case "name" -> Comparator.comparing(QuizProjection::getName, String.CASE_INSENSITIVE_ORDER);
-      case "createdAt" -> Comparator.comparing(QuizProjection::getCreatedAt);
-      case "rating" -> Comparator.comparing(QuizProjection::getRating);
-      default -> Comparator.comparing(QuizProjection::getId); // fallback
-    };
-
-    if ("desc".equalsIgnoreCase(order)) {
-      comparator = comparator.reversed();
-    }
-
-    quizzes.sort(comparator);
-
-    return quizzes;
+    return repository.findAllByKeyword(keyword, sortBy, order);
   }
 
   private QuizResponse toDTO(Quiz quiz) {
