@@ -122,7 +122,7 @@ public class OtpServiceImpl implements OtpService {
   private void incrementResendAttempts(String email) {
     String resendKey = RESEND_PREFIX + email;
     String resendValue = (String) redisTemplate.opsForValue().get(resendKey);
-    int resendAttempts = resendValue != null ? Integer.parseInt(resendValue) + 1 : 1;
+    int resendAttempts = resendValue != null ? Integer.parseInt(resendValue) + 1 : 0;
 
     redisTemplate.opsForValue().set(resendKey, String.valueOf(resendAttempts));
     redisTemplate.expire(resendKey, OTP_EXPIRATION, TimeUnit.MINUTES);
