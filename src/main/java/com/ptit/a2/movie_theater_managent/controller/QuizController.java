@@ -86,7 +86,7 @@ public class QuizController {
   }
 
   @GetMapping("/search")
-  public ResponseGeneral<List<QuizProjection>> findByKeyword(
+  public ResponseGeneral<List<QuizDTO>> findByKeyword(
         @RequestParam String keyword,
         @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "desc") String order
@@ -95,7 +95,7 @@ public class QuizController {
 
     return ResponseGeneral.ofSuccess(
           SUCCESS,
-          quizService.findByKeyword(keyword, sortBy, order)
+          quizFacadeService.findByKeyword(keyword, sortBy, order)
     );
   }
 }

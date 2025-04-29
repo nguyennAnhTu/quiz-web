@@ -18,4 +18,6 @@ public interface QuizFacadeService {
   QuizResponse update(Integer id, QuizRequest request);
 
   void delete(Integer id);
+
+  List<QuizDTO> findByKeyword(String keyword, String sortBy, String order);
 }

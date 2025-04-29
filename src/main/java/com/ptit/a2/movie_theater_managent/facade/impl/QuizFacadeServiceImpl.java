@@ -166,15 +166,26 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     }
 
     List<Quiz> quizzes = quizService.findByIdIn(quizIds);
-    List<QuizDTO> quizDTOS = new ArrayList<>();
 
+    return this.getQuizDTOS(quizzes);
+  }
+
+  @Override
+  public List<QuizDTO> findByKeyword(String keyword, String sortBy, String order) {
+    List<Quiz> quizzes = quizService.findByKeyword(keyword, sortBy, order);
+
+    return this.getQuizDTOS(quizzes);
+  }
+
+  private List<QuizDTO> getQuizDTOS(List<Quiz> quizzes) {
+    List<QuizDTO> quizDTOS = new ArrayList<>();
     for (Quiz quiz : quizzes) {
       QuizDTO quizDTO = this.toDto(quiz);
-
       quizDTO.setCreatedBy(userService.get(quiz.getCreatedBy()));
       if (quiz.getMediaId() != null) {
         quizDTO.setMedia(mediaService.find(quiz.getMediaId()));
       }
+
       quizDTOS.add(quizDTO);
     }
 

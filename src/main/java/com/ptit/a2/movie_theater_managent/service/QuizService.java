@@ -27,5 +27,5 @@ public interface QuizService {
 
   List<QuizProjection> findByCreatedBy(Integer modifier);
 
-  List<QuizProjection> findByKeyword(String keyword, String sortBy, String order);
+  List<Quiz> findByKeyword(String keyword, String sortBy, String order);
 }

@@ -33,25 +33,8 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
         @Param("modifier") Integer modifier
   );
 
-//  @Query("""
-//  SELECT q.id AS id,
-//         q.name AS name,
-//         q.mediaId AS mediaId,
-//         q.createdBy AS createdBy,
-//         q.rating AS rating,
-//         q.createdAt AS createdAt
-//  FROM Quiz q
-//  WHERE ((:keyword='') or (LOWER(q.name) LIKE LOWER(CONCAT('%', :keyword, '%'))))  AND q.modifier = 1
-//""")
-//  List<QuizProjection> findAllByKeyword(@Param("keyword") String keyword);
-
   @Query("""
-    SELECT q.id AS id,
-           q.name AS name,
-           q.mediaId AS mediaId,
-           q.createdBy AS createdBy,
-           q.rating AS rating,
-           q.createdAt AS createdAt
+    SELECT q
     FROM Quiz q
     WHERE ((:keyword = '') OR (LOWER(q.name) LIKE LOWER(CONCAT('%', :keyword, '%'))))
       AND q.modifier = 1
@@ -63,7 +46,7 @@ public interface QuizRepository extends JpaRepository<Quiz, Integer> {
       CASE WHEN :sortBy = 'name' AND :order = 'desc' THEN q.name END DESC,
       CASE WHEN :sortBy = 'name' AND :order = 'asc' THEN q.name END ASC
 """)
-  List<QuizProjection> findAllByKeyword(
+  List<Quiz> findAllByKeyword(
         @Param("keyword") String keyword,
         @Param("sortBy") String sortBy,
         @Param("order") String order
