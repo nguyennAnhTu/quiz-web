@@ -133,6 +133,11 @@ public class UserServiceImpl implements UserService {
     repository.save(user);
   }
 
+  @Override
+  public List<UserResponse> getUsersByIds(List<Integer> userIds) {
+    log.info("(getUsersByIds) userIds: {}", userIds);
+    return repository.findUsersByIds(userIds);
+  }
 
   private User find(Integer id) {
     return repository.findById(id).orElseThrow(UserNotFoundException::new);

@@ -26,12 +26,6 @@ public class QuizSession extends AuditEntity {
   @Column(name = "current_question_id")
   private Integer currentQuestionId;
 
-  @Column(name = "start_time")
-  private Long startTime;
-
-  @Column(name = "duration")
-  private Long duration; // Thời lượng quiz (phút)
-
   public enum Status {
     WAITING,    // Đang chờ
     STARTED,    // Đang diễn ra

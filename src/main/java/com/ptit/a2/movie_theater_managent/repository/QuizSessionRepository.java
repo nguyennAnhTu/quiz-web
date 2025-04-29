@@ -14,13 +14,13 @@ public interface QuizSessionRepository extends JpaRepository<QuizSession, Intege
 
   @Query("SELECT new com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionResponse(" +
         "qs.id, qs.quizId, qs.sessionCode, qs.status, qs.currentQuestionId, " +
-        "qs.startTime, qs.duration, qs.createdBy, qs.createdAt, qs.lastUpdatedBy, qs.lastUpdatedAt) " +
+        "qs.createdBy, qs.createdAt, qs.lastUpdatedBy, qs.lastUpdatedAt) " +
         "FROM QuizSession qs WHERE :keyword = '' OR qs.sessionCode LIKE %:keyword%")
   Page<QuizSessionResponse> list(String keyword, Pageable pageable);
 
   @Query("SELECT new com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionResponse(" +
         "qs.id, qs.quizId, qs.sessionCode, qs.status, qs.currentQuestionId, " +
-        "qs.startTime, qs.duration, qs.createdBy, qs.createdAt, qs.lastUpdatedBy, qs.lastUpdatedAt) " +
+        "qs.createdBy, qs.createdAt, qs.lastUpdatedBy, qs.lastUpdatedAt) " +
         "FROM QuizSession qs WHERE :keyword = '' OR qs.sessionCode LIKE %:keyword%")
   List<QuizSessionResponse> listAll(String keyword);
 }

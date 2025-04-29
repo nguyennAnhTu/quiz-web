@@ -8,6 +8,8 @@ import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 
+import java.util.List;
+
 public interface UserService {
   AuthRegisterResponse create(AuthRegisterRequest request);
 
@@ -24,4 +26,6 @@ public interface UserService {
   PageResponse<UserResponse> list(String keyword, int page, int size, boolean isAll);
 
   void changePassword(Integer id, ChangePasswordRequest request);
+
+  List<UserResponse> getUsersByIds(List<Integer> userIds);
 }

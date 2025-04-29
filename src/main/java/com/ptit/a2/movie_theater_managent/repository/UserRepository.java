@@ -37,4 +37,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   List<UserResponse> listAll(@Param("keyword") String keyword);
 
   Boolean existsByUsername(String username);
+
+  @Query("""
+        SELECT new com.ptit.a2.movie_theater_managent.dto.response.UserResponse(
+                u.id, u.email, u.username, u.isAdmin
+                ) FROM User u WHERE u.id IN :userIds
+        """)
+  List<UserResponse> findUsersByIds(@Param("userIds") List<Integer> userIds);
 }

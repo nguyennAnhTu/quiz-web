@@ -38,7 +38,6 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     quizSession.setSessionCode(request.sessionCode());
     quizSession.setStatus(QuizSession.Status.valueOf(request.status()));
     quizSession.setCurrentQuestionId(request.currentQuestionId());
-    quizSession.setDuration(request.duration()); // Lưu duration
 
     repository.save(quizSession);
 
@@ -117,10 +116,6 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     }
 
     quizSession.setCurrentQuestionId(request.currentQuestionId());
-
-    if (request.duration() != null) {
-      quizSession.setDuration(request.duration());
-    }
   }
 
   private QuizSessionResponse toDTO(QuizSession quizSession) {
@@ -130,8 +125,6 @@ public class QuizSessionServiceImpl implements QuizSessionService {
           quizSession.getSessionCode(),
           quizSession.getStatus(),
           quizSession.getCurrentQuestionId(),
-          quizSession.getStartTime(),
-          quizSession.getDuration(),
           quizSession.getCreatedBy(),
           quizSession.getCreatedAt(),
           quizSession.getLastUpdatedBy(),

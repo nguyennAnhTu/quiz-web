@@ -2,9 +2,12 @@ package com.ptit.a2.movie_theater_managent.controller;
 
 import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
+import com.ptit.a2.movie_theater_managent.dto.request.quiz_session.QuizSessionAnswerRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.quiz_session.QuizSessionCreateRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.quiz_session.QuizSessionUpdateRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionResponse;
+
+import com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionAnswerResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizSessionFacadeService;
 import com.ptit.a2.movie_theater_managent.service.QuizSessionService;
 import jakarta.validation.Valid;
@@ -129,14 +132,53 @@ public class QuizSessionController {
   // Kết thúc quiz session
   @PostMapping("/{quizSessionId}/end")
   public ResponseGeneral<Void> endQuiz(
-        @PathVariable("quizSessionId") Integer quizSessionId,
-        @RequestParam(required = false) String reason
+        @PathVariable("quizSessionId") Integer quizSessionId
   ) {
-    log.info("Start endQuiz - quizSessionId: {}, reason: {}", quizSessionId, reason);
+    log.info("Start endQuiz - quizSessionId: {}", quizSessionId);
 
-    quizSessionFacadeService.endQuiz(quizSessionId, reason);
+    quizSessionFacadeService.endQuiz(quizSessionId);
     return ResponseGeneral.ofSuccess(
           SUCCESS
+    );
+  }
+
+  // Chuyển sang câu hỏi tiếp theo
+  @PostMapping("/{quizSessionId}/next-question")
+  public ResponseGeneral<Void> nextQuestion(
+        @PathVariable("quizSessionId") Integer quizSessionId,
+        @RequestParam("current_question_id") Integer currentQuestionId
+  ) {
+    log.info("Start nextQuestion - quizSessionId: {}, currentQuestionId: {}", quizSessionId, currentQuestionId);
+
+    quizSessionFacadeService.nextQuestion(quizSessionId, currentQuestionId);
+    return ResponseGeneral.ofSuccess(
+          SUCCESS
+    );
+  }
+
+  @PostMapping("/{quizSessionId}/out")
+  public ResponseGeneral<String> outQuiz(
+        @PathVariable("quizSessionId") Integer quizSessionId
+  ) {
+    log.info("Start outQuiz - quizSessionId: {}", quizSessionId);
+
+    quizSessionFacadeService.outQuiz(quizSessionId);
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          "User out quiz session successfully"
+    );
+  }
+
+  @PostMapping("/{quizSessionId}/submit-answer")
+  public ResponseGeneral<QuizSessionAnswerResponse> submitAnswer(
+        @PathVariable("quizSessionId") Integer quizSessionId,
+        @RequestBody @Valid QuizSessionAnswerRequest request
+  ) {
+    log.info("Start submitAnswer - quizSessionId: {}, request: {}", quizSessionId, request);
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizSessionFacadeService.submitAnswer(quizSessionId, request)
     );
   }
 }

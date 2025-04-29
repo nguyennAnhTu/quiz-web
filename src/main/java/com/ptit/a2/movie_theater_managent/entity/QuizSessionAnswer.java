@@ -33,4 +33,7 @@ public class QuizSessionAnswer {
 
   @Column(name = "submitted_at")
   private Long submittedAt;
+
+  @Column(name = "score")
+  private Integer score;
 }

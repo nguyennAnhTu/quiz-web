@@ -14,15 +14,13 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class NotificationDto {
   private NotificationType type;
-  private Integer quizSessionId;
-  private Long timestamp;
-  private String message;
-  private Map<String, Object> data;
+  private Object data;
+
 
   public enum NotificationType {
-    START_QUIZ,      // Quiz bắt đầu
-    PAUSE_QUIZ,      // Quiz tạm dừng
-    END_QUIZ,        // Quiz kết thúc
-    LEADERBOARD_UPDATE // Cập nhật bảng xếp hạng
+    RELOAD_USER,
+    NEXT_QUESTION,
+    CHANGE_STATUS_ROOM,
+    LEADERBOARD
   }
 }

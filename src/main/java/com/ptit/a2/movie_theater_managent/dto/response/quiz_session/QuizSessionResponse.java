@@ -11,8 +11,6 @@ public record QuizSessionResponse(
       String sessionCode,
       QuizSession.Status status,
       Integer currentQuestionId,
-      Long startTime,
-      Long duration,
       Integer createdBy,
       Long createdAt,
       Integer lastUpdatedBy,
@@ -24,8 +22,6 @@ public record QuizSessionResponse(
         String sessionCode,
         QuizSession.Status status,
         Integer currentQuestionId,
-        Long startTime,
-        Long duration,
         Integer createdBy,
         Long createdAt,
         Integer lastUpdatedBy,
@@ -33,7 +29,7 @@ public record QuizSessionResponse(
   ) {
     return new QuizSessionResponse(
           id, quizId, sessionCode, status, currentQuestionId,
-          startTime, duration, createdBy, createdAt, lastUpdatedBy, lastUpdatedAt
+          createdBy, createdAt, lastUpdatedBy, lastUpdatedAt
     );
   }
 }

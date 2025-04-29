@@ -15,6 +15,7 @@
             <column name="answer_id" type="integer"/>
             <column name="is_correct" type="boolean"/>
             <column name="submitted_at" type="bigint"/>
+            <column name="score" type="integer"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
