@@ -96,7 +96,7 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  public List<QuizProjection> findByKeyword(String keyword, String sortBy, String order) {
+  public List<Quiz> findByKeyword(String keyword, String sortBy, String order) {
     log.info("(findByKeyword) findQuiz request: {}", keyword);
 
     return repository.findAllByKeyword(keyword, sortBy, order);

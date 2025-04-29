@@ -156,6 +156,7 @@ public class UserServiceImpl implements UserService {
     log.info("(createInactiveUser) request: {}", request);
 
     this.checkEmailExists(request.getEmail());
+    this.checkUsernameExists(request.getUsername());
 
     User user = User.of(
           request.getEmail(),
@@ -210,6 +211,7 @@ public class UserServiceImpl implements UserService {
     log.info("(updatePassword) id:{}, password: {}", id, password);
 
     User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+    this.checkUsernameExists(username);
     user.setPassword(getPasswordEncoder().encode(password));
     user.setUsername(username);
     repository.save(user);
