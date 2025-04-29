@@ -14,4 +14,7 @@ public interface QuizTagRepository extends JpaRepository<QuizTag, Integer> {
 
   @Query("SELECT q.tagId FROM QuizTag q WHERE q.quizId = :quizId")
   List<Integer> findTagIdsByQuizId(@Param("quizId") Integer quizId);
+
+  @Query("SELECT distinct q.quizId FROM QuizTag q WHERE q.tagId = :tagId")
+  List<Integer> findQuizIdsByTagId(@Param("tagId") Integer tagId);
 }

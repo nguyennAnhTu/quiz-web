@@ -17,7 +17,7 @@ import java.util.List;
 public class QuizRequest {
   private String name;
   private String description;
-  private String mediaLink;
   private List<Integer> tagIds;
   private Integer modifier;
+  private MediaRequest media;
 }

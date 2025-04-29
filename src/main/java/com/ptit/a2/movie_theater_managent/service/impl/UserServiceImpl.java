@@ -5,6 +5,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.ChangePasswordRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.UserUpdateRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.UserDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
@@ -13,14 +14,17 @@ import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundE
 import com.ptit.a2.movie_theater_managent.exception.authentication.UsernameExistedException;
 import com.ptit.a2.movie_theater_managent.exception.film.BadRequestException;
 import com.ptit.a2.movie_theater_managent.repository.UserRepository;
+import com.ptit.a2.movie_theater_managent.service.MediaService;
 import com.ptit.a2.movie_theater_managent.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.BLANK;
 import static com.ptit.a2.movie_theater_managent.utils.PasswordEncoderUtils.getPasswordEncoder;
@@ -29,6 +33,7 @@ import static com.ptit.a2.movie_theater_managent.utils.PasswordEncoderUtils.getP
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
   private final UserRepository repository;
+  private final MediaService mediaService;
 
   @Override
   @Transactional
@@ -46,10 +51,8 @@ public class UserServiceImpl implements UserService {
     repository.save(user);
 
     return AuthRegisterResponse.of(
-          user.getId(),
           user.getEmail(),
-          user.getUsername(),
-          user.getIsAdmin()
+          user.getUsername()
     );
   }
 
@@ -57,8 +60,27 @@ public class UserServiceImpl implements UserService {
   public User findByEmail(String email) {
     log.info("(findByEmail) request: {}", email);
 
-    return repository.findByEmail(email)
-          .orElseThrow(UserNotFoundException::new);
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+    if (Boolean.TRUE.equals(!user.getIsActive())) {
+      throw new UserNotFoundException();
+    }
+
+    return user;
+  }
+
+  @Override
+  public void findUserByEmail(String email) {
+    log.info("(findUserByEmail), email: {}", email);
+
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+  }
+
+  @Override
+  public Optional<User> find(String email) {
+    log.info("(find), email: {}", email);
+
+    return repository.findByEmail(email);
   }
 
   @Override
@@ -138,6 +160,72 @@ public class UserServiceImpl implements UserService {
     log.info("(getUsersByIds) userIds: {}", userIds);
     return repository.findUsersByIds(userIds);
   }
+  @Override
+  @Transactional
+  public void createInactiveUser(AuthRegisterRequest request, Integer mediaId) {
+    log.info("(createInactiveUser) request: {}", request);
+
+    this.checkEmailExists(request.getEmail());
+    this.checkUsernameExists(request.getUsername());
+
+    User user = User.of(
+          request.getEmail(),
+          getPasswordEncoder().encode(request.getPassword()),
+          request.getUsername(),
+          request.getIsAdmin()
+    );
+
+    user.setMediaId(mediaId);
+
+    repository.save(user);
+  }
+
+  @Override
+  public void activeUser(String email) {
+    log.info("(activeUser) email: {}", email);
+
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+    if (Boolean.TRUE.equals(user.getIsActive())) {
+      throw new EmailExistedException();
+    }
+
+    user.setIsActive(true);
+    repository.save(user);
+  }
+
+  @Override
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void deleteInactiveUser(String email) {
+    log.info("(deleteInactiveUser) email: {}", email);
+
+    User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    Integer mediaId = user.getMediaId();
+
+    repository.delete(user);
+    mediaService.delete(mediaId);
+  }
+
+  @Override
+  public UserDTO get(Integer id) {
+    User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+
+    return UserDTO.of(
+          user.getId(),
+          user.getUsername()
+    );
+  }
+
+  @Override
+  public void updateInformation(Integer id, String password, String username) {
+    log.info("(updatePassword) id:{}, password: {}", id, password);
+
+    User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+    this.checkUsernameExists(username);
+    user.setPassword(getPasswordEncoder().encode(password));
+    user.setUsername(username);
+    repository.save(user);
+  }
 
   private User find(Integer id) {
     return repository.findById(id).orElseThrow(UserNotFoundException::new);
@@ -163,7 +251,7 @@ public class UserServiceImpl implements UserService {
   }
 
   private void checkUsernameExists(String username) {
-    if(Boolean.TRUE.equals(repository.existsByUsername(username))) {
+    if (Boolean.TRUE.equals(repository.existsByUsername(username))) {
       throw new UsernameExistedException();
     }
   }

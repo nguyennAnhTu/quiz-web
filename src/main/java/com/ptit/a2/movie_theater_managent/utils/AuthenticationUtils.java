@@ -14,9 +14,28 @@ import java.util.List;
 @Slf4j
 public class AuthenticationUtils {
   public static Integer getCurrentUserId() {
-    Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //log.info(authentication.toString());
 
-    return (Integer) authenticate.getPrincipal();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return null; // Không có authentication hoặc chưa đăng nhập
+    }
+
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof String principalStr) {
+      if ("anonymousUser".equals(principalStr)) {
+        return null; // Anonymous user
+      }
+      try {
+        log.info(principalStr);
+        return Integer.parseInt(principalStr); // Parse userId từ String
+      } catch (NumberFormatException e) {
+        throw new IllegalStateException("Invalid userId format in authentication principal: " + principalStr, e);
+      }
+    } else if (principal instanceof Integer) {
+      return (Integer) principal; // Đã là Integer
+    }
+    throw new IllegalStateException("Unexpected principal type: " + principal.getClass().getName());
   }
 
   public static List<GrantedAuthority> getDefaultAuthorities(boolean isAdmin) {

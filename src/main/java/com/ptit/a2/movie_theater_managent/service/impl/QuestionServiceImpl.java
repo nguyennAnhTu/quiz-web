@@ -17,12 +17,12 @@ public class QuestionServiceImpl implements QuestionService {
   private final QuestionRepository repository;
 
   @Override
-  public QuestionResponse create(QuestionRequest request) {
+  public QuestionResponse create(QuestionRequest request, Integer mediaId) {
     log.info("create question request: {}", request);
 
     Question question = Question.of(
           request.getContent(),
-          request.getMediaLink(),
+          mediaId,
           request.getFunFact(),
           request.getQuizId(),
           request.getQuestionOrder(),
@@ -33,10 +33,10 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public QuestionResponse find(Integer id) {
+  public Question find(Integer id) {
     log.info("find question by id: {}", id);
 
-    return this.toDTO(this.get(id));
+    return this.get(id);
   }
 
   @Override
@@ -48,7 +48,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     // Cập nhật các thuộc tính từ request
     existingQuestion.setContent(request.getContent());
-    existingQuestion.setMediaLink(request.getMediaLink());
+    //existingQuestion.setMediaLink(request.getMediaLink());
     existingQuestion.setFunFact(request.getFunFact());
     existingQuestion.setQuizId(request.getQuizId());
     existingQuestion.setQuestionOrder(request.getQuestionOrder());
@@ -59,12 +59,10 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public List<QuestionResponse> findByQuizId(Integer quizId) {
+  public List<Question> findByQuizId(Integer quizId) {
     log.info("find question by quiz id: {}", quizId);
 
-    List<Question> questions = repository.findAllByQuizId(quizId);
-
-    return questions.stream().map(this::toDTO).toList();
+    return repository.findAllByQuizId(quizId);
   }
 
   @Override
@@ -85,7 +83,7 @@ public class QuestionServiceImpl implements QuestionService {
     return QuestionResponse.of(
           question.getId(),
           question.getContent(),
-          question.getMediaLink(),
+          null,
           question.getFunFact(),
           question.getQuizId(),
           question.getTime(),

@@ -8,4 +8,6 @@ public interface QuizTagService {
   void delete(Integer quizId);
 
   List<Integer> getTagIds(Integer quizId);
+
+  List<Integer> getQuizIds(Integer tagId);
 }

@@ -2,10 +2,13 @@ package com.ptit.a2.movie_theater_managent.facade.impl;
 
 import com.ptit.a2.movie_theater_managent.dto.request.AnswerRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.QuestionRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.MediaResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.QuestionResponse;
+import com.ptit.a2.movie_theater_managent.entity.Question;
 import com.ptit.a2.movie_theater_managent.exception.quiz.QuizNotFoundException;
 import com.ptit.a2.movie_theater_managent.facade.QuestionFacadeService;
 import com.ptit.a2.movie_theater_managent.service.AnswerService;
+import com.ptit.a2.movie_theater_managent.service.MediaService;
 import com.ptit.a2.movie_theater_managent.service.QuestionService;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +23,28 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
   private final QuestionService questionService;
   private final AnswerService answerService;
   private final QuizService quizService;
+  private final MediaService mediaService;
 
   @Override
   @Transactional
-  public QuestionResponse create(QuestionRequest questionRequest) {
-    log.info("===start create question request: {}", questionRequest);
+  public QuestionResponse create(QuestionRequest request) {
+    log.info("===start create question request: {}", request);
 
-    if (!quizService.exist(questionRequest.getQuizId())) {
+    if (!quizService.exist(request.getQuizId())) {
       throw new QuizNotFoundException();
     }
 
-    QuestionResponse questionResponse = questionService.create(questionRequest);
+    Integer mediaId = null;
+    MediaResponse mediaResponse = null;
+    if (request.getMedia() != null) {
+      mediaResponse = mediaService.create(request.getMedia());
+      mediaId = mediaResponse.getId();
+    }
 
-    for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
+    QuestionResponse questionResponse = questionService.create(request, mediaId);
+    questionResponse.setMedia(mediaResponse);
+
+    for (AnswerRequest answerRequest : request.getAnswers()) {
       answerService.create(answerRequest, questionResponse.getId());
     }
 
@@ -43,7 +55,12 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
   public QuestionResponse find(Integer id) {
     log.info("===start find question request: {}", id);
 
-    QuestionResponse questionResponse = questionService.find(id);
+    Question question = questionService.find(id);
+    QuestionResponse questionResponse = this.toDTO(question);
+    if (question.getMediaId() != null) {
+      questionResponse.setMedia(this.mediaService.find(question.getMediaId()));
+    }
+
     questionResponse.setAnswer(
           answerService.findByQuestionId(questionResponse.getId())
     );
@@ -61,6 +78,7 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
   }
 
   @Override
+  @Transactional
   public QuestionResponse update(Integer id, QuestionRequest questionRequest) {
     if (!quizService.exist(questionRequest.getQuizId())) {
       throw new QuizNotFoundException();
@@ -73,5 +91,17 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
     }
 
     return questionResponse;
+  }
+
+  private QuestionResponse toDTO(Question question) {
+    return QuestionResponse.of(
+          question.getId(),
+          question.getContent(),
+          null,
+          question.getFunFact(),
+          question.getQuizId(),
+          question.getTime(),
+          question.getQuestionOrder()
+    );
   }
 }

@@ -35,6 +35,9 @@ public class MovieTheaterConstants {
     public static final String GENRE_NOT_FOUND = "genre not found";
     public static final String QUIZ_NOT_FOUND = "quiz not found";
     public static final String QUESTION_NOT_FOUND = "question not found";
+    public static final String INVALID_OTP = "invalid otp";
+    public static final String MAX_OTP_ATTEMPTS = "max otp attempts";
+    public static final String MAX_RESEND_OTP_ATTEMPTS = "max resneted otp attempts";
   }
 
 
@@ -73,7 +76,7 @@ public class MovieTheaterConstants {
     public static String TYPE_TOKEN = "Bear ";
     public static String AUTHORIZATION = "Authorization";
     public static String[] MATCHER_USER_API = {"/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
-          , "/actuator/","/websocket/**"};
+          , "/actuator/","/websocket/**,/api/v1/quizzes/by-tag", "/api/v1/quizzes/search", "/api/v1/quizzes/{id}"};
     public static String[] MATCHER_ADMIN_API = {"/api/v1/genres/**, /api/v1/films/**"};
     public static String CLAIMS = "claims";
     public static final String CLAIM_ID_KEY = "id";

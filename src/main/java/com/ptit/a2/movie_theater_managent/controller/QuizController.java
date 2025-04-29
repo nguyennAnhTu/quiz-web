@@ -1,7 +1,10 @@
 package com.ptit.a2.movie_theater_managent.controller;
 
+import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
@@ -9,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.SUCCESS;
 
@@ -66,5 +71,31 @@ public class QuizController {
 
     quizFacadeService.delete(id);
     return ResponseGeneral.ofSuccess(SUCCESS);
+  }
+
+  @GetMapping("/by-tag")
+  public ResponseGeneral<List<QuizDTO>> list(
+        @RequestParam Integer tagId
+  ) {
+    log.info("===start list quizzes");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizFacadeService.list(tagId)
+    );
+  }
+
+  @GetMapping("/search")
+  public ResponseGeneral<List<QuizDTO>> findByKeyword(
+        @RequestParam String keyword,
+        @RequestParam(defaultValue = "createdAt") String sortBy,
+        @RequestParam(defaultValue = "desc") String order
+  ) {
+    log.info("===start list quizzes by keyword");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizFacadeService.findByKeyword(keyword, sortBy, order)
+    );
   }
 }

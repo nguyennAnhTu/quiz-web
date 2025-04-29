@@ -22,4 +22,23 @@
             <column name="last_updated_at"  type="bigint"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="20250422-0945-drop-column-media-link-in-table-quizzes" author="tuna">
+        <dropColumn tableName="quizzes" columnName="media_link"/>
+    </changeSet>
+
+    <changeSet id="20250422-0945-add-column-media-link-id-in-table-quizzes" author="tuna">
+        <addColumn tableName="quizzes">
+            <column name="media_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250422-0945-add-fk-to-table-medias" author="tuna">
+        <addForeignKeyConstraint
+                baseTableName="quizzes"
+                baseColumnNames="media_id"
+                constraintName="fk_quiz_media"
+                referencedTableName="medias"
+                referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
