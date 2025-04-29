@@ -84,6 +84,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public User getById(Integer userId) {
+    return repository.findById(userId).orElseThrow(UserNotFoundException::new);
+  }
+
+  @Override
   public UserResponse update(Integer id, UserUpdateRequest request) {
     log.info("(update) id:{}, request:{}", id, request);
 
@@ -150,6 +155,11 @@ public class UserServiceImpl implements UserService {
     repository.save(user);
   }
 
+  @Override
+  public List<UserResponse> getUsersByIds(List<Integer> userIds) {
+    log.info("(getUsersByIds) userIds: {}", userIds);
+    return repository.findUsersByIds(userIds);
+  }
   @Override
   @Transactional
   public void createInactiveUser(AuthRegisterRequest request, Integer mediaId) {

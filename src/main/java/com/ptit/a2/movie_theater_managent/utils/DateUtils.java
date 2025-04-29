@@ -38,6 +38,12 @@ public class DateUtils {
       throw new IllegalArgumentException(e);
     }
   }
+  public static long convertDateToLong(Date date) {
+    if (date == null) {
+      return 0;
+    }
+    return date.getTime();
+  }
 
   public static Long getStartOfDayInTimestamp(String dateFrom) {
     if (dateFrom == null || dateFrom.isEmpty()) return 0L;
