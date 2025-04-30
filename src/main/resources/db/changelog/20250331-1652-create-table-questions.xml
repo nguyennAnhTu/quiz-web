@@ -54,4 +54,23 @@
     <changeSet id="20250407-1542-rename-column-order" author="tuna">
         <renameColumn tableName="questions" oldColumnName="order" newColumnName="question_order"/>
     </changeSet>
+
+    <changeSet id="20250422-1532-drop-column-media-link-in-table-questions" author="tuna">
+        <dropColumn tableName="questions" columnName="media_link"/>
+    </changeSet>
+
+    <changeSet id="20250422-1532-add-column-media-id-in-table-questions" author="tuna">
+        <addColumn tableName="questions">
+            <column name="media_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20250422-1532-add-fk-to-table-medias" author="tuna">
+        <addForeignKeyConstraint
+                baseTableName="questions"
+                baseColumnNames="media_id"
+                constraintName="fk_quiz_media"
+                referencedTableName="medias"
+                referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

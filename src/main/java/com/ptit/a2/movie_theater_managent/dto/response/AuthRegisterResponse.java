@@ -13,8 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class AuthRegisterResponse {
-  private Integer id;
   private String email;
-  private String name;
-  private Boolean isAdmin;
+  private String message;
 }

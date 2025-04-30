@@ -18,7 +18,7 @@ public class QuizResponse {
   private Integer id;
   private String name;
   private String description;
-  private String mediaLink;
+  private MediaResponse media;
   private Integer modifier;
   private Double rating;
   private Integer creatorId;

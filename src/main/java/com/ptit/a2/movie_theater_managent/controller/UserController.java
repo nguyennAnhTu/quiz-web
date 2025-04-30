@@ -4,12 +4,17 @@ import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.user.ChangePasswordRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.UserUpdateRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
+import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
+import com.ptit.a2.movie_theater_managent.service.QuizService;
 import com.ptit.a2.movie_theater_managent.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.SUCCESS;
 
@@ -19,6 +24,8 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 @RequiredArgsConstructor
 public class UserController {
   private final UserService userService;
+  private final QuizFacadeService quizFacadeService;
+  private final QuizService quizService;
 
   // Lấy thông tin chi tiết user
   @GetMapping("/{id}")
@@ -87,4 +94,15 @@ public class UserController {
     );
   }
 
+  @GetMapping("/quizzes")
+  public ResponseGeneral<List<QuizProjection>> listQuiz(
+        @RequestParam(required = false) Integer modifier
+  ) {
+    log.info("Start listQuizzes");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizService.findByCreatedBy(modifier)
+    );
+  }
 }

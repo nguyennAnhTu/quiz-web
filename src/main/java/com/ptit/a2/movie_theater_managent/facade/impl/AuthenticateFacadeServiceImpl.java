@@ -1,16 +1,17 @@
 package com.ptit.a2.movie_theater_managent.facade.impl;
 
 import com.ptit.a2.movie_theater_managent.constanst.enums.TokenType;
-import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
-import com.ptit.a2.movie_theater_managent.dto.request.LoginRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.*;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.LoginResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.MediaResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
-import com.ptit.a2.movie_theater_managent.exception.base.authenticate.PasswordIncorrectException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.MaxOtpAttemptException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.PasswordIncorrectException;
+import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundException;
 import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
-import com.ptit.a2.movie_theater_managent.service.JwtTokenService;
-import com.ptit.a2.movie_theater_managent.service.TokenRedisService;
-import com.ptit.a2.movie_theater_managent.service.UserService;
+import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.AuthConstant.*;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.ACCESS_TOKEN_KEY;
@@ -33,13 +35,40 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
   private final UserService userService;
   private final JwtTokenService jwtTokenService;
   private final TokenRedisService tokenRedisService;
+  private final EmailService emailService;
+  private final OtpService otpService;
+  private final MediaService mediaService;
+
+  private static final String OTP_SENT_MESSAGE = "Otp has been sent";
+  private static final String SUCCESS_MESSAGE = "Register successfully";
+  private static final String DEFAULT_URL_AVATAR = "https://res.cloudinary.com/diorkbloc/image/upload/v1745505401/4b905b1342b5635310923fd10319c265_y36zy1.jpg";
 
   @Override
   @Transactional
   public AuthRegisterResponse register(AuthRegisterRequest request) {
     log.info("(register) request: {}", request);
 
-    return userService.create(request);
+    Optional<User> userOptional = userService.find(request.getEmail());
+    if (userOptional.isEmpty()) {
+      MediaResponse mediaResponse = mediaService.create(
+            MediaRequest.of(DEFAULT_URL_AVATAR, 1F, 0F, 0F)
+      );
+      userService.createInactiveUser(request, mediaResponse.getId());
+      this.sendOtp(request.getEmail());
+    } else {
+      User user = userOptional.get();
+      if (Boolean.TRUE.equals(user.getIsActive())) {
+        throw new EmailExistedException();
+      }
+
+      userService.updateInformation(user.getId(), request.getPassword(), request.getUsername());
+      this.sendOtp(request.getEmail());
+    }
+
+    return AuthRegisterResponse.of(
+          request.getEmail(),
+          OTP_SENT_MESSAGE
+    );
   }
 
   @Override
@@ -79,6 +108,61 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
     );
   }
 
+  @Override
+  @Transactional
+  public AuthRegisterResponse verifyOtp(VerifyOtpRequest request) {
+    log.info("(verifyOtp) request: {}", request);
+
+    try {
+      otpService.validateOtp(request);
+      if (Boolean.TRUE.equals(request.getIsRegister())) {
+        userService.activeUser(request.getEmail());
+      }
+      otpService.clearOtpData(request.getEmail());
+
+      return AuthRegisterResponse.of(
+            request.getEmail(),
+            SUCCESS_MESSAGE
+      );
+    } catch (Exception e) {
+      // Kiểm tra nếu là lỗi vượt quá số lần thử
+      if (e instanceof MaxOtpAttemptException) {
+        log.info("start delete");
+        // Nếu là quá trình đăng ký, xóa user chưa active
+        if (Boolean.TRUE.equals(request.getIsRegister())) {
+          userService.deleteInactiveUser(request.getEmail());
+        }
+        // Xóa OTP data
+        otpService.clearOtpData(request.getEmail());
+        throw e;
+      }
+      throw e;
+    }
+  }
+
+  @Override
+  public AuthRegisterResponse resendOtp(ResendOtpRequest request) {
+    log.info("(resendOtp) email: {}", request.getEmail());
+
+    // Kiểm tra tài khoản inactive
+    userService.findUserByEmail(request.getEmail());
+
+    // Kiểm tra giới hạn gửi lại OTP
+    otpService.checkResendLimit(request.getEmail());
+
+    // Xóa OTP cũ
+    otpService.clearOtpData(request.getEmail());
+
+    // Tạo và gửi OTP mới
+    String otp = otpService.generateOtp(request.getEmail());
+    emailService.sendOtpEmail(request.getEmail(), otp);
+
+    return AuthRegisterResponse.of(
+          request.getEmail(),
+          OTP_SENT_MESSAGE
+    );
+  }
+
   private void equalPassword(String passwordRaw, String passwordEncrypted) {
     if (!getPasswordEncoder().matches(passwordRaw, passwordEncrypted)) {
       throw new PasswordIncorrectException();
@@ -97,5 +181,10 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
 
     log.info("(buildClaimsForToken) claims: {}", claims);
     return claims;
+  }
+
+  private void sendOtp(String email) {
+    String otp = otpService.generateOtp(email);
+    emailService.sendOtpEmail(email, otp);
   }
 }
