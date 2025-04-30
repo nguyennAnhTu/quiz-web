@@ -40,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
   @Override
-  public QuestionResponse update(Integer id, QuestionRequest request) {
+  public Question update(Integer id, QuestionRequest request) {
     log.info("update question request: id={}, request={}", id, request);
 
     // Tìm question hiện tại theo id
@@ -55,7 +55,7 @@ public class QuestionServiceImpl implements QuestionService {
     existingQuestion.setTime(request.getTime());
 
     // Lưu và trả về response
-    return this.toDTO(repository.save(existingQuestion));
+    return repository.save(existingQuestion);
   }
 
   @Override

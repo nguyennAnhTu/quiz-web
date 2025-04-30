@@ -11,7 +11,7 @@ public interface QuestionService {
 
   Question find(Integer id);
 
-  QuestionResponse update(Integer id, QuestionRequest request);
+  Question update(Integer id, QuestionRequest request);
 
   List<Question> findByQuizId(Integer quizId);
 
