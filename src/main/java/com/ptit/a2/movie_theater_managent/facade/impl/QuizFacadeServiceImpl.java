@@ -32,7 +32,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
   @Override
   @Transactional
   public QuizResponse create(QuizRequest request) {
-    log.info("===start create quiz, request={}, {}, {}, {}, {}", request.getName(), request.getDescription(), request.getMedia(), request.getTagIds(), request.getModifier());
+    log.info("===start create quiz, request={}, {}, {}, {}, {}, {}, {}, {}", request.getName(), request.getDescription(), request.getMedia().getMediaLink(), request.getMedia().getZoom(), request.getMedia().getOffsetX(), request.getMedia().getOffsetY(), request.getTagIds(), request.getModifier());
 
     Integer mediaId = null;
     MediaResponse mediaResponse = null;
@@ -41,7 +41,11 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
       mediaId = mediaResponse.getId();
     }
 
-    QuizResponse quizResponse = quizService.create(request, mediaId);
+    Quiz quiz = quizService.create(request, mediaId);
+
+    QuizResponse quizResponse = this.toDTO(quiz);
+    quizResponse.setCreator(userService.get(quiz.getCreatedBy()));
+
     quizResponse.setMedia(mediaResponse);
     for (Integer tagId : request.getTagIds()) {
       quizTagService.create(quizResponse.getId(), tagId);
@@ -59,6 +63,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     Quiz quiz = quizService.find(id);
 
     QuizResponse quizResponse = this.toDTO(quiz);
+    quizResponse.setCreator(userService.get(quiz.getCreatedBy()));
     if (quiz.getMediaId() != null) {
       quizResponse.setMedia(mediaService.find(quiz.getMediaId()));
     }
@@ -200,7 +205,7 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
           null,
           quiz.getModifier(),
           quiz.getRating(),
-          quiz.getCreatedBy(),
+          null,
           null,
           null
     );

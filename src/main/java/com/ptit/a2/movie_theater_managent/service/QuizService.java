@@ -1,17 +1,13 @@
 package com.ptit.a2.movie_theater_managent.service;
 
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
-import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
-import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface QuizService {
-  QuizResponse create(QuizRequest request, Integer mediaId);
+  Quiz create(QuizRequest request, Integer mediaId);
 
   Quiz find(Integer id);
 
