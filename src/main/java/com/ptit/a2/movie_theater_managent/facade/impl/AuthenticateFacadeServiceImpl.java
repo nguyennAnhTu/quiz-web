@@ -9,7 +9,6 @@ import com.ptit.a2.movie_theater_managent.entity.User;
 import com.ptit.a2.movie_theater_managent.exception.authentication.EmailExistedException;
 import com.ptit.a2.movie_theater_managent.exception.authentication.MaxOtpAttemptException;
 import com.ptit.a2.movie_theater_managent.exception.authentication.PasswordIncorrectException;
-import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundException;
 import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
 import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.ACCESS_TOKEN_KEY;
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.RedisConstant.REFRESH_TOKEN_KEY;
 import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
-import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getDefaultAuthorities;
 import static com.ptit.a2.movie_theater_managent.utils.PasswordEncoderUtils.getPasswordEncoder;
 
 @Slf4j
@@ -94,6 +92,7 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
     tokenRedisService.hashSet(REFRESH_TOKEN_KEY, user.getId().toString(), refreshToken);
 
     return LoginResponse.of(
+          user.getId(),
           accessToken,
           refreshToken
     );

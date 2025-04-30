@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor(staticName = "of")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class LoginResponse {
+  private Integer userId;
   private String accessToken;
   private String refreshToken;
 }

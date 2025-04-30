@@ -21,7 +21,7 @@ public class QuizResponse {
   private MediaResponse media;
   private Integer modifier;
   private Double rating;
-  private Integer creatorId;
+  private UserDTO creator;
   private List<QuestionResponse> questions;
   private List<Integer> tagIds;
 }
