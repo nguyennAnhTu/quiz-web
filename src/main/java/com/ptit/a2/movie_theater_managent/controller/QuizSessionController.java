@@ -91,13 +91,13 @@ public class QuizSessionController {
     );
   }
 
-  @PostMapping("/{quizSessionId}/join")
+  @PostMapping("/join")
   public ResponseGeneral<String> joinQuiz(
-        @PathVariable("quizSessionId") Integer quizSessionId
+        @RequestParam("session_code") String sessionCode
   ) {
-    log.info("Start joinQuiz - quizSessionId: {}", quizSessionId);
+    log.info("Start joinQuiz - sessionCode: {}", sessionCode);
 
-    quizSessionFacadeService.joinQuiz(quizSessionId);
+    quizSessionFacadeService.joinQuiz(sessionCode);
     return ResponseGeneral.ofSuccess(
           SUCCESS,
           "User joined quiz session successfully"

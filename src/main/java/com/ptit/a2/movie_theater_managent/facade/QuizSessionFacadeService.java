@@ -4,7 +4,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.quiz_session.QuizSessionAn
 import com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionAnswerResponse;
 
 public interface QuizSessionFacadeService {
-  void joinQuiz(Integer quizSessionId);
+  void joinQuiz(String sessionCode);
 
   void startQuiz(Integer quizSessionId);
 

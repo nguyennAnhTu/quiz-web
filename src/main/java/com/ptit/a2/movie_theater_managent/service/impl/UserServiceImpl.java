@@ -227,6 +227,12 @@ public class UserServiceImpl implements UserService {
     repository.save(user);
   }
 
+  @Override
+  public User save(User user) {
+    log.info("(save) user: {}", user);
+    return repository.save(user);
+  }
+
   private User find(Integer id) {
     return repository.findById(id).orElseThrow(UserNotFoundException::new);
   }

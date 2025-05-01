@@ -14,8 +14,16 @@ import com.ptit.a2.movie_theater_managent.facade.AuthenticateFacadeService;
 import com.ptit.a2.movie_theater_managent.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +46,8 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
   private final EmailService emailService;
   private final OtpService otpService;
   private final MediaService mediaService;
+
+  private final RestTemplate restTemplate;
 
   private static final String OTP_SENT_MESSAGE = "Otp has been sent";
   private static final String SUCCESS_MESSAGE = "Register successfully";
@@ -161,6 +171,106 @@ public class AuthenticateFacadeServiceImpl implements AuthenticateFacadeService 
           request.getEmail(),
           OTP_SENT_MESSAGE
     );
+  }
+
+  @Override
+  @Transactional
+  public LoginResponse loginWithGoogle(GoogleOAuth2Request request) {
+    log.info("(loginWithGoogle) request: {}", request);
+
+    // Bước 1: Trao đổi mã code để lấy access token
+    String tokenUrl = "https://oauth2.googleapis.com/token";
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("code", request.getCode());
+    params.add("client_id", "156272986514-3142b1hdt8fghr98t0ectmsgvp0k5fie.apps.googleusercontent.com");
+    params.add("client_secret", "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");
+    params.add("redirect_uri", request.getRedirectUri());
+    params.add("grant_type", "authorization_code");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    HttpEntity<MultiValueMap<String, String>> tokenRequest = new HttpEntity<>(params, headers);
+
+    Map<String, Object> tokenResponse;
+    try {
+      tokenResponse = restTemplate.postForObject(tokenUrl, tokenRequest, Map.class);
+    } catch (Exception e) {
+      log.error("Failed to exchange code for access token: {}", e.getMessage());
+      throw new RuntimeException("Failed to exchange code for access token", e);
+    }
+
+    String accessToken = (String) tokenResponse.get("access_token");
+    if (accessToken == null) {
+      log.error("Access token is null in response: {}", tokenResponse);
+      throw new RuntimeException("Failed to retrieve access token from Google");
+    }
+
+    // Bước 2: Sử dụng access token để gọi API userinfo
+    String userInfoUrl = "https://www.googleapis.com/oauth2/v3/userinfo";
+    HttpHeaders userInfoHeaders = new HttpHeaders();
+    userInfoHeaders.setBearerAuth(accessToken); // Thêm access token vào header
+    HttpEntity<String> userInfoRequest = new HttpEntity<>(userInfoHeaders);
+
+    Map<String, Object> userInfo;
+    try {
+      userInfo = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequest, Map.class).getBody();
+    } catch (Exception e) {
+      log.error("Failed to fetch user info: {}", e.getMessage());
+      throw new RuntimeException("Failed to fetch user info from Google", e);
+    }
+
+    String email = (String) userInfo.get("email");
+    String name = (String) userInfo.get("name");
+
+    if (email == null || name == null) {
+      log.error("User info is incomplete: email={}, name={}", email, name);
+      throw new RuntimeException("Incomplete user info from Google");
+    }
+
+    // Check if user exists
+    Optional<User> userOptional = userService.find(email);
+    User user;
+
+    if (userOptional.isEmpty()) {
+      // Create new user if not exists
+      MediaResponse mediaResponse = mediaService.create(
+            MediaRequest.of(DEFAULT_URL_AVATAR, 1F, 0F, 0F)
+      );
+      user = User.of(
+            email,
+            getPasswordEncoder().encode("google_oauth2_password"),
+            name,
+            false
+      );
+      user.setMediaId(mediaResponse.getId());
+      user.setIsActive(true);
+      user = userService.save(user);
+    } else {
+      user = userOptional.get();
+      if (!user.getIsActive()) {
+        user.setIsActive(true);
+        user = userService.save(user);
+      }
+    }
+
+    // Generate tokens
+    String accessTokenJwt = jwtTokenService.generateToken(
+          user.getId().toString(),
+          this.buildClaimsForToken(user, TokenType.ACCESS_TOKEN),
+          TokenType.ACCESS_TOKEN
+    );
+
+    String refreshToken = jwtTokenService.generateToken(
+          user.getId().toString(),
+          this.buildClaimsForToken(user, TokenType.REFRESH_TOKEN),
+          TokenType.REFRESH_TOKEN
+    );
+
+    // Store tokens in Redis
+    tokenRedisService.hashSet(ACCESS_TOKEN_KEY, user.getId().toString(), accessTokenJwt);
+    tokenRedisService.hashSet(REFRESH_TOKEN_KEY, user.getId().toString(), refreshToken);
+
+    return LoginResponse.of(accessTokenJwt, refreshToken);
   }
 
   private void equalPassword(String passwordRaw, String passwordEncrypted) {

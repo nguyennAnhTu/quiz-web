@@ -45,4 +45,6 @@ public interface UserService {
   Optional<User> find(String email);
 
   void updateInformation(Integer id, String password, String username);
+
+  User save(User user);
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.BLANK;
 
@@ -25,23 +26,32 @@ import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants
 @Service
 public class QuizSessionServiceImpl implements QuizSessionService {
   private final QuizSessionRepository repository;
+  private final Random random = new Random();
 
   @Override
   @Transactional
   public QuizSessionResponse create(QuizSessionCreateRequest request) {
     log.info("(create quiz session) request: {}", request);
 
-    this.checkSessionCodeExists(request.sessionCode());
-
+    String sessionCode = generateUniqueSessionCode();
+    
     QuizSession quizSession = new QuizSession();
     quizSession.setQuizId(request.quizId());
-    quizSession.setSessionCode(request.sessionCode());
+    quizSession.setSessionCode(sessionCode);
     quizSession.setStatus(QuizSession.Status.valueOf(request.status()));
     quizSession.setCurrentQuestionId(request.currentQuestionId());
 
     repository.save(quizSession);
 
     return this.toDTO(quizSession);
+  }
+
+  private String generateUniqueSessionCode() {
+    String sessionCode;
+    do {
+      sessionCode = String.format("%06d", random.nextInt(1000000));
+    } while (repository.existsBySessionCode(sessionCode));
+    return sessionCode;
   }
 
   @Override
@@ -136,5 +146,12 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     if (Boolean.TRUE.equals(repository.existsBySessionCode(sessionCode))) {
       throw new SessionCodeExistedException();
     }
+  }
+
+  @Override
+  public QuizSession findBySessionCode(String sessionCode) {
+    log.info("(findBySessionCode) sessionCode: {}", sessionCode);
+    return repository.findBySessionCode(sessionCode)
+          .orElse(null);
   }
 }
