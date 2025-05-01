@@ -39,16 +39,16 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
   private final QuizSessionAnswerService quizSessionAnswerService;
 
   @Override
-  public void joinQuiz(Integer quizSessionId) {
-    log.info("(joinQuiz) quizSessionId: {}", quizSessionId);
+  public void joinQuiz(String sessionCode) {
+    log.info("(joinQuiz) sessionCode: {}", sessionCode);
 
     Integer userId = AuthenticationUtils.getCurrentUserId();
-    QuizSession quizSession = findQuizSession(quizSessionId);
+    QuizSession quizSession = findQuizSessionByCode(sessionCode);
 
     switch (quizSession.getStatus()) {
       case WAITING:
-        addUserToWaitingList(quizSessionId, userId);
-        notifyWaitingUsers(quizSessionId);
+        addUserToWaitingList(quizSession.getId(), userId);
+        notifyWaitingUsers(quizSession.getId());
         break;
 
       case STARTED:
@@ -310,6 +310,15 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
   // Tìm QuizSession và ném lỗi nếu không tồn tại
   private QuizSession findQuizSession(Integer quizSessionId) {
     QuizSession quizSession = quizSessionService.findById(quizSessionId);
+    if (quizSession == null) {
+      throw new QuizSessionNotFoundException();
+    }
+    return quizSession;
+  }
+
+  // Tìm QuizSession bằng sessionCode và ném lỗi nếu không tồn tại
+  private QuizSession findQuizSessionByCode(String sessionCode) {
+    QuizSession quizSession = quizSessionService.findBySessionCode(sessionCode);
     if (quizSession == null) {
       throw new QuizSessionNotFoundException();
     }

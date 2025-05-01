@@ -9,6 +9,8 @@ import com.ptit.a2.movie_theater_managent.dto.response.UserDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
 
+import java.util.Optional;
+
 import java.util.List;
 
 import java.util.Optional;
@@ -31,6 +33,7 @@ public interface UserService {
   void changePassword(Integer id, ChangePasswordRequest request);
 
   List<UserResponse> getUsersByIds(List<Integer> userIds);
+
   void createInactiveUser(AuthRegisterRequest request, Integer mediaId);
 
   void activeUser(String email);
@@ -44,4 +47,6 @@ public interface UserService {
   Optional<User> find(String email);
 
   void updateInformation(Integer id, String password, String username);
+
+  User save(User user);
 }

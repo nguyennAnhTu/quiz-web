@@ -13,6 +13,8 @@ public interface QuizSessionService {
 
   QuizSession findById(Integer id);
 
+  QuizSession findBySessionCode(String sessionCode);
+
   QuizSessionResponse update(Integer id, QuizSessionUpdateRequest request);
 
   QuizSessionResponse detail(Integer id);

@@ -8,9 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuizSessionRepository extends JpaRepository<QuizSession, Integer> {
   Boolean existsBySessionCode(String sessionCode);
+
+  Optional<QuizSession> findBySessionCode(String sessionCode);
 
   @Query("SELECT new com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionResponse(" +
         "qs.id, qs.quizId, qs.sessionCode, qs.status, qs.currentQuestionId, " +

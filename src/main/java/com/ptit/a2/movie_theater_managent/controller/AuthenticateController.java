@@ -2,6 +2,7 @@ package com.ptit.a2.movie_theater_managent.controller;
 
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.GoogleOAuth2Request;
 import com.ptit.a2.movie_theater_managent.dto.request.LoginRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.ResendOtpRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.VerifyOtpRequest;
@@ -12,10 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.ptit.a2.movie_theater_managent.constanst.MovieTheaterConstants.CommonConstants.SUCCESS;
 
@@ -46,7 +44,7 @@ public class AuthenticateController {
     log.info("===Start login");
 
     return ResponseGeneral.ofSuccess(
-          SUCCESS,
+          SUCCESS,  
           authenticateFacadeService.login(request)
     );
   }
@@ -83,6 +81,18 @@ public class AuthenticateController {
           HttpStatus.OK.value(),
           SUCCESS,
           authenticateFacadeService.resendOtp(request)
+    );
+  }
+
+  @PostMapping("/oauth2/callback/google")
+  public ResponseGeneral<LoginResponse> loginWithGoogle(
+        @RequestBody @Valid GoogleOAuth2Request request
+  ) {
+    log.info("===Start login with Google");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          authenticateFacadeService.loginWithGoogle(request)
     );
   }
 }

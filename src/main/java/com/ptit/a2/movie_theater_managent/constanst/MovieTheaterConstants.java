@@ -76,7 +76,7 @@ public class MovieTheaterConstants {
     public static String TYPE_TOKEN = "Bear ";
     public static String AUTHORIZATION = "Authorization";
     public static String[] MATCHER_USER_API = {"/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
-          , "/actuator/","/websocket/**,/api/v1/quizzes/by-tag", "/api/v1/quizzes/search", "/api/v1/quizzes/{id}"};
+          , "/actuator/", "/api/v1/quizzes/by-tag", "/api/v1/quizzes/search", "/api/v1/quizzes/{id}", "/websocket/**", "/login/oauth2/code/google"};
     public static String[] MATCHER_ADMIN_API = {"/api/v1/genres/**, /api/v1/films/**"};
     public static String CLAIMS = "claims";
     public static final String CLAIM_ID_KEY = "id";
