@@ -83,8 +83,12 @@ public class QuestionFacadeServiceImpl implements QuestionFacadeService {
     if (!quizService.exist(questionRequest.getQuizId())) {
       throw new QuizNotFoundException();
     }
+    Question question = questionService.update(id, questionRequest);
 
-    QuestionResponse questionResponse = questionService.update(id,questionRequest);
+    QuestionResponse questionResponse = this.toDTO(question);
+    questionResponse.setMedia(
+          mediaService.update(question.getMediaId(), questionRequest.getMedia())
+    );
     answerService.deleteByQuestionId(id);
     for (AnswerRequest answerRequest : questionRequest.getAnswers()) {
       answerService.create(answerRequest, questionResponse.getId());

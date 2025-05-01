@@ -29,7 +29,7 @@ public class QuizServiceImpl implements QuizService {
 
   @Override
   @Transactional
-  public QuizResponse create(QuizRequest request, Integer mediaId) {
+  public Quiz create(QuizRequest request, Integer mediaId) {
     log.info("(create) createQuiz request: {}", request);
       Quiz quiz = Quiz.of(
             request.getName(),
@@ -39,7 +39,7 @@ public class QuizServiceImpl implements QuizService {
       );
 
       repository.save(quiz);
-      return this.toDTO(quiz);
+      return quiz;
   }
 
   @Override
@@ -110,7 +110,7 @@ public class QuizServiceImpl implements QuizService {
           null,
           quiz.getModifier(),
           quiz.getRating(),
-          quiz.getCreatedBy(),
+          null,
           null,
           null
     );

@@ -36,7 +36,7 @@ public class SecurityConfiguration {
           .authorizeHttpRequests(auth -> {
             auth.requestMatchers(MATCHER_ADMIN_API).hasRole("ADMIN");
             auth.requestMatchers(MATCHER_USER_API).permitAll();
-            auth.anyRequest().authenticated();
+            auth.anyRequest().permitAll();
           })
           .oauth2Login(Customizer.withDefaults())
           .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
