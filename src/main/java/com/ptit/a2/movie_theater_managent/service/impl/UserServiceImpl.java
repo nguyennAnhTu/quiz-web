@@ -5,6 +5,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.AuthRegisterRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.ChangePasswordRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.UserUpdateRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.AuthRegisterResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.MediaResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.UserDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.entity.User;
@@ -93,8 +94,9 @@ public class UserServiceImpl implements UserService {
     log.info("(update) id:{}, request:{}", id, request);
 
     final User user = this.find(id);
-    this.updateField(user, request);
 
+    this.updateField(user, request);
+    mediaService.update(user.getMediaId(), request.getAvatarUrl());
     return this.toDTO(repository.save(user));
   }
 
@@ -102,7 +104,12 @@ public class UserServiceImpl implements UserService {
   public UserResponse detail(Integer id) {
     log.info("(detail) id:{}", id);
 
-    return this.toDTO(this.find(id));
+    User user = this.find(id);
+    MediaResponse media = mediaService.find(user.getMediaId());
+    UserResponse userResponse = this.toDTO(user);
+    userResponse.setMedia(media);
+
+    return userResponse;
   }
 
   @Override
@@ -246,7 +253,8 @@ public class UserServiceImpl implements UserService {
           user.getId(),
           user.getEmail(),
           user.getUsername(),
-          user.getIsAdmin()
+          user.getIsAdmin(),
+          null
     );
   }
 

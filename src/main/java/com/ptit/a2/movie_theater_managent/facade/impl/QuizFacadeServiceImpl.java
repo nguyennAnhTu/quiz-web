@@ -1,6 +1,7 @@
 package com.ptit.a2.movie_theater_managent.facade.impl;
 
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.RatingRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.*;
 import com.ptit.a2.movie_theater_managent.entity.Question;
 import com.ptit.a2.movie_theater_managent.entity.Quiz;
@@ -16,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils.getCurrentUserId;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -180,6 +183,38 @@ public class QuizFacadeServiceImpl implements QuizFacadeService {
     List<Quiz> quizzes = quizService.findByKeyword(keyword, sortBy, order);
 
     return this.getQuizDTOS(quizzes);
+  }
+
+  @Override
+  public List<QuizDTO> findByCreatedBy(Integer modifier) {
+    log.info("===start list quiz modifier: {}", modifier);
+
+    List<Quiz> quizzes = quizService.findByCreatedBy(modifier);
+    return this.getQuizDTOS(quizzes);
+  }
+
+  @Override
+  @Transactional
+  public RatingResponse ratingQuiz(Integer quizId, RatingRequest request) {
+    log.info("(ratingQuiz) quizId: {}", quizId);
+
+    Quiz quiz = quizService.find(quizId);
+    int count = 0;
+    if (quiz.getRatingCount() == null) {
+      count = 1;
+    } else {
+      count = quiz.getRatingCount() + 1;
+    }
+
+    quiz.setRating((quiz.getRating() + request.getRating()) / count);
+    quiz.setRatingCount(count);
+    Quiz updatedQuiz = quizService.update(quiz);
+
+    return RatingResponse.of(
+          updatedQuiz.getId(),
+          updatedQuiz.getRating(),
+          updatedQuiz.getRatingCount()
+    );
   }
 
   private List<QuizDTO> getQuizDTOS(List<Quiz> quizzes) {

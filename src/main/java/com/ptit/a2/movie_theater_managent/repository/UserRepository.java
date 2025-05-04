@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
   @Query("""
         SELECT new com.ptit.a2.movie_theater_managent.dto.response.UserResponse(
-                u.id, u.email,u.username, u.isAdmin
+                u.id, u.email,u.username, u.isAdmin, null
                 ) FROM User u WHERE
                 :keyword = '' OR
                 LOWER(u.username) ILIKE %:keyword% OR
@@ -40,7 +40,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
   @Query("""
         SELECT new com.ptit.a2.movie_theater_managent.dto.response.UserResponse(
-                u.id, u.email, u.username, u.isAdmin
+                u.id, u.email, u.username, u.isAdmin, null
                 ) FROM User u WHERE u.id IN :userIds
         """)
   List<UserResponse> findUsersByIds(@Param("userIds") List<Integer> userIds);

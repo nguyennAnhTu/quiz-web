@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,17 @@ public class MediaServiceImpl implements MediaService {
     log.info("(delete) media request: {}", id);
 
     repository.deleteById(id);
+  }
+
+  @Override
+  public void update(Integer id, String url) {
+    log.info("(update) media request: {}", id);
+
+    Media media = repository.findById(id).orElseThrow(null);
+    if (!Objects.equals(media.getMediaLink(), url)) {
+      media.setMediaLink(url);
+    }
+    repository.save(media);
   }
 
   private Media toEntity(MediaRequest request) {

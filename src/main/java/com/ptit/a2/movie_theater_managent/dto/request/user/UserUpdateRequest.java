@@ -13,5 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserUpdateRequest {
+  private String avatarUrl;
   private String username;
 }

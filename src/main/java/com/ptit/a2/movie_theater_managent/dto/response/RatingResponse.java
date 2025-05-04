@@ -12,10 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserResponse {
-  private Integer id;
-  private String email;
-  private String username;
-  private Boolean isAdmin;
-  private MediaResponse media;
+public class RatingResponse {
+  private Integer quizId;
+  private Double rating;
+  private Integer ratingCount;
 }

@@ -2,9 +2,11 @@ package com.ptit.a2.movie_theater_managent.facade;
 
 import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.RatingRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.RatingResponse;
 
 import java.util.List;
 
@@ -20,4 +22,8 @@ public interface QuizFacadeService {
   void delete(Integer id);
 
   List<QuizDTO> findByKeyword(String keyword, String sortBy, String order);
+
+  List<QuizDTO> findByCreatedBy(Integer modifier);
+
+  RatingResponse ratingQuiz(Integer quizId, RatingRequest request);
 }

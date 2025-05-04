@@ -4,6 +4,7 @@ import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.user.ChangePasswordRequest;
 import com.ptit.a2.movie_theater_managent.dto.request.user.UserUpdateRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
@@ -95,14 +96,14 @@ public class UserController {
   }
 
   @GetMapping("/quizzes")
-  public ResponseGeneral<List<QuizProjection>> listQuiz(
+  public ResponseGeneral<List<QuizDTO>> listQuiz(
         @RequestParam(required = false) Integer modifier
   ) {
     log.info("Start listQuizzes");
 
     return ResponseGeneral.ofSuccess(
           SUCCESS,
-          quizService.findByCreatedBy(modifier)
+          quizFacadeService.findByCreatedBy(modifier)
     );
   }
 }
