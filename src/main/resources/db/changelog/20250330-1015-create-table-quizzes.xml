@@ -41,4 +41,10 @@
                 referencedTableName="medias"
                 referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet id="20250502-1251-add-column-rating-count" author="tuna">
+        <addColumn tableName="quizzes">
+            <column name="rating_count" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

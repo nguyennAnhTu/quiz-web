@@ -20,6 +20,7 @@ public class Quiz extends AuditEntity {
   private Integer mediaId;
   private Integer modifier;
   private Double rating = 0.0;
+  private Integer ratingCount = 0;
 
   private Quiz (String name, String description, Integer mediaId, Integer modifier) {
     this.name = name;

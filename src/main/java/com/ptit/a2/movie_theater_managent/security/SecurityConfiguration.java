@@ -36,10 +36,13 @@ public class SecurityConfiguration {
           .authorizeHttpRequests(auth -> {
             auth.requestMatchers(MATCHER_ADMIN_API).hasRole("ADMIN");
             auth.requestMatchers(MATCHER_USER_API).permitAll();
-            auth.anyRequest().permitAll();
+            auth.anyRequest().authenticated();
           })
-          .oauth2Login(Customizer.withDefaults())
+//          .exceptionHandling(
+//                exception -> exception.authenticationEntryPoint(new RestAuthenticationEntryPoint())
+//          )
           .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+          //.oauth2Login(Customizer.withDefaults());
 //          .exceptionHandling(exception -> exception
 //                .authenticationEntryPoint(unAuthenticationCustomHandler)
 //                .accessDeniedHandler(unAuthorizationCustomHandler));

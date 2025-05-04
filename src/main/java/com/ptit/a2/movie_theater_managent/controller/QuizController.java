@@ -3,9 +3,11 @@ package com.ptit.a2.movie_theater_managent.controller;
 import com.ptit.a2.movie_theater_managent.dto.PageResponse;
 import com.ptit.a2.movie_theater_managent.dto.ResponseGeneral;
 import com.ptit.a2.movie_theater_managent.dto.request.QuizRequest;
+import com.ptit.a2.movie_theater_managent.dto.request.RatingRequest;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizDTO;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizProjection;
 import com.ptit.a2.movie_theater_managent.dto.response.QuizResponse;
+import com.ptit.a2.movie_theater_managent.dto.response.RatingResponse;
 import com.ptit.a2.movie_theater_managent.facade.QuizFacadeService;
 import com.ptit.a2.movie_theater_managent.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +98,19 @@ public class QuizController {
     return ResponseGeneral.ofSuccess(
           SUCCESS,
           quizFacadeService.findByKeyword(keyword, sortBy, order)
+    );
+  }
+
+  @PostMapping("/{id}/rate")
+  public ResponseGeneral<RatingResponse> rating(
+        @PathVariable Integer id,
+        @RequestBody RatingRequest request
+  ) {
+    log.info("===start rating quiz");
+
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizFacadeService.ratingQuiz(id, request)
     );
   }
 }

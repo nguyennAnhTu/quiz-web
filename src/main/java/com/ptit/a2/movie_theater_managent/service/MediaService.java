@@ -10,6 +10,8 @@ public interface MediaService {
 
   MediaResponse update(Integer id, MediaRequest request);
 
+  void update(Integer id, String url);
+
   MediaResponse find(Integer id);
 
   List<MediaResponse> findAllByIds(List<Integer> ids);

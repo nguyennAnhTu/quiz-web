@@ -88,7 +88,7 @@ public class QuizServiceImpl implements QuizService {
   }
 
   @Override
-  public List<QuizProjection> findByCreatedBy(Integer modifier) {
+  public List<Quiz> findByCreatedBy(Integer modifier) {
     Integer userId = getCurrentUserId();
     log.info("(findByCreatedBy) findQuiz request: {}", userId);
 
