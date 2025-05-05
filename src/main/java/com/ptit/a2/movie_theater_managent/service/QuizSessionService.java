@@ -19,6 +19,8 @@ public interface QuizSessionService {
 
   QuizSessionResponse detail(Integer id);
 
+  QuizSessionResponse detail(String code);
+
   void delete(Integer id);
 
   PageResponse<QuizSessionResponse> list(String keyword, int page, int size, boolean isAll);

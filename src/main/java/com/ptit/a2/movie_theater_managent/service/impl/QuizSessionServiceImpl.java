@@ -6,6 +6,7 @@ import com.ptit.a2.movie_theater_managent.dto.request.quiz_session.QuizSessionUp
 import com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionResponse;
 import com.ptit.a2.movie_theater_managent.entity.QuizSession;
 import com.ptit.a2.movie_theater_managent.exception.authentication.UserNotFoundException;
+import com.ptit.a2.movie_theater_managent.exception.quiz_session.QuizSessionNotFoundException;
 import com.ptit.a2.movie_theater_managent.exception.quiz_session.SessionCodeExistedException;
 import com.ptit.a2.movie_theater_managent.repository.QuizSessionRepository;
 import com.ptit.a2.movie_theater_managent.service.QuizSessionService;
@@ -83,6 +84,11 @@ public class QuizSessionServiceImpl implements QuizSessionService {
     log.info("(detail) id: {}", id);
 
     return this.toDTO(this.findById(id));
+  }
+
+  @Override
+  public QuizSessionResponse detail(String code) {
+    return this.toDTO(repository.findBySessionCode(code).orElseThrow(QuizSessionNotFoundException::new));
   }
 
   @Override

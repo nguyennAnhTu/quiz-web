@@ -49,6 +49,17 @@ public class QuizSessionController {
     );
   }
 
+  @GetMapping("/detail")
+  public ResponseGeneral<QuizSessionResponse> getQuizSessionDetailByCode(
+        @RequestParam("code") String code
+  ) {
+    log.info("Start getQuizSessionDetail");
+    return ResponseGeneral.ofSuccess(
+          SUCCESS,
+          quizSessionService.detail(code)
+    );
+  }
+
   // Cập nhật quiz session
   @PutMapping("/{id}")
   public ResponseGeneral<QuizSessionResponse> updateQuizSession(
