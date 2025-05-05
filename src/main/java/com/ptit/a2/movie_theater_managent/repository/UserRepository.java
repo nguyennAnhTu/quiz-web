@@ -40,7 +40,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
   @Query("""
         SELECT new com.ptit.a2.movie_theater_managent.dto.response.UserResponse(
-                u.id, u.email, u.username, u.isAdmin, null
+                u.id, u.email, u.username, u.isAdmin, u.mediaId, null
                 ) FROM User u WHERE u.id IN :userIds
         """)
   List<UserResponse> findUsersByIds(@Param("userIds") List<Integer> userIds);
