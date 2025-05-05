@@ -17,5 +17,14 @@ public class UserResponse {
   private String email;
   private String username;
   private Boolean isAdmin;
+  private Integer imageId;
   private MediaResponse media;
+
+  public UserResponse(Integer id, String email, String username, Boolean isAdmin, MediaResponse media) {
+    this.id = id;
+    this.email = email;
+    this.username = username;
+    this.isAdmin = isAdmin;
+    this.media = media;
+  }
 }

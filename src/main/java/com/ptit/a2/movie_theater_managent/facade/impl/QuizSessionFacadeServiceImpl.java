@@ -12,10 +12,7 @@ import com.ptit.a2.movie_theater_managent.exception.quiz_session.QuizSessionEnde
 import com.ptit.a2.movie_theater_managent.exception.quiz_session.QuizSessionNotFoundException;
 import com.ptit.a2.movie_theater_managent.exception.quiz_session.QuizSessionTimeExpiredException;
 import com.ptit.a2.movie_theater_managent.facade.QuizSessionFacadeService;
-import com.ptit.a2.movie_theater_managent.service.QuizSessionAnswerService;
-import com.ptit.a2.movie_theater_managent.service.QuizSessionParticipantService;
-import com.ptit.a2.movie_theater_managent.service.QuizSessionService;
-import com.ptit.a2.movie_theater_managent.service.UserService;
+import com.ptit.a2.movie_theater_managent.service.*;
 import com.ptit.a2.movie_theater_managent.service.websocket.WebSocketService;
 import com.ptit.a2.movie_theater_managent.utils.AuthenticationUtils;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +35,7 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
   private final WebSocketService webSocketService;
   private final UserService userService;
   private final QuizSessionAnswerService quizSessionAnswerService;
+  private final MediaService mediaService;
 
   @Override
   public void joinQuiz(String sessionCode) {
@@ -363,6 +361,7 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
                 user.getId(),
                 user.getEmail(),
                 user.getUsername(),
+                mediaService.find(user.getImageId()),
                 user.getIsAdmin(),
                 user.getId().equals(hostId)
           ))

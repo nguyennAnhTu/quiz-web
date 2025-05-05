@@ -254,6 +254,7 @@ public class UserServiceImpl implements UserService {
           user.getEmail(),
           user.getUsername(),
           user.getIsAdmin(),
+          user.getMediaId(),
           null
     );
   }
