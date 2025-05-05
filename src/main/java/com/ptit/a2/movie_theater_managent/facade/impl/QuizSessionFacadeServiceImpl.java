@@ -2,6 +2,7 @@ package com.ptit.a2.movie_theater_managent.facade.impl;
 
 import com.ptit.a2.movie_theater_managent.dto.NotificationDto;
 import com.ptit.a2.movie_theater_managent.dto.request.quiz_session.QuizSessionAnswerRequest;
+import com.ptit.a2.movie_theater_managent.dto.response.MediaResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.UserResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionAnswerResponse;
 import com.ptit.a2.movie_theater_managent.dto.response.quiz_session.QuizSessionUserResponse;
@@ -429,6 +430,7 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
             return LeaderboardEntry.of(
                   user.getId(),
                   user.getUsername(),
+                  user.getMedia(),
                   tuple.getScore().intValue()
             );
           })
@@ -439,10 +441,11 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
   public record LeaderboardEntry(
         Integer userId,
         String username,
+        MediaResponse mediaResponse,
         Integer score
   ) {
-    public static LeaderboardEntry of(Integer userId, String username, Integer score) {
-      return new LeaderboardEntry(userId, username, score);
+    public static LeaderboardEntry of(Integer userId, String username, MediaResponse mediaResponse, Integer score) {
+      return new LeaderboardEntry(userId, username,mediaResponse, score);
     }
   }
 }
