@@ -49,7 +49,7 @@ public class QuizSessionController {
     );
   }
 
-  @GetMapping()
+  @GetMapping("/detail")
   public ResponseGeneral<QuizSessionResponse> getQuizSessionDetailByCode(
         @RequestParam("code") String code
   ) {
