@@ -282,7 +282,6 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
     if (currentScore == null) {
       currentScore = 0.0;
     }
-
     Double newScore = 0.0;
 
     // Cập nhật điểm mới
@@ -290,7 +289,6 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
       newScore = currentScore + request.score();
     }
     else newScore = currentScore + 0;
-
     redisTemplate.opsForZSet().add(leaderboardKey, userId.toString(), newScore);
 
     // Gửi thông báo bảng xếp hạng
