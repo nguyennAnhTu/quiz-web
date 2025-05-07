@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
           request.getUsername(),
           request.getIsAdmin()
     );
-    repository.save(user);
+    repository.saveAndFlush(user);
 
     return AuthRegisterResponse.of(
           user.getEmail(),

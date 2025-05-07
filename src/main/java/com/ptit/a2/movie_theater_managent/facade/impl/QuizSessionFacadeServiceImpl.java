@@ -190,8 +190,8 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
     log.info("(endQuiz) quizSessionId: {}", quizSessionId);
 
     QuizSession quizSession = findQuizSession(quizSessionId);
-    validateStatus(quizSession, Set.of(QuizSession.Status.WAITING, QuizSession.Status.STARTED, QuizSession.Status.PAUSED),
-          "Quiz session can only be ended from WAITING, STARTED, or PAUSED status");
+//    validateStatus(quizSession, Set.of(QuizSession.Status.WAITING, QuizSession.Status.STARTED, QuizSession.Status.PAUSED),
+//          "Quiz session can only be ended from WAITING, STARTED, or PAUSED status");
 
     // Lấy danh sách user từ database
     List<QuizSessionParticipant> participants = quizSessionParticipantService.findBySessionId(quizSessionId);
@@ -210,6 +210,7 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
     log.info("Notified {} participants about quiz session {} ending", userIds.size(), quizSessionId);
 
     updateQuizSessionStatus(quizSession, QuizSession.Status.ENDED);
+    redisTemplate.delete("QUIZ_LEADERBOARD:" + quizSessionId);
   }
 
   @Override
@@ -282,8 +283,14 @@ public class QuizSessionFacadeServiceImpl implements QuizSessionFacadeService {
       currentScore = 0.0;
     }
 
+    Double newScore = 0.0;
+
     // Cập nhật điểm mới
-    Double newScore = currentScore + request.score();
+    if  (request.isCorrect()) {
+      newScore = currentScore + request.score();
+    }
+    else newScore = currentScore + 0;
+
     redisTemplate.opsForZSet().add(leaderboardKey, userId.toString(), newScore);
 
     // Gửi thông báo bảng xếp hạng

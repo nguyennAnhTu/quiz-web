@@ -1,7 +1,12 @@
 package com.ptit.a2.movie_theater_managent.exception.quiz_session;
 
-public class QuizSessionNotFoundException extends RuntimeException {
+import com.ptit.a2.movie_theater_managent.exception.base.NotFoundException;
+import com.ptit.a2.movie_theater_managent.exception.newbase.BaseException;
+
+import static com.ptit.a2.movie_theater_managent.exception.base.StatusConstants.NOT_FOUND;
+
+public class QuizSessionNotFoundException extends BaseException {
   public QuizSessionNotFoundException() {
-    super("Quiz session not found");
+    super(NOT_FOUND, "NOT FOUND", "Quiz session not found");
   }
 }
