@@ -1,7 +1,11 @@
 package com.ptit.a2.movie_theater_managent.exception.quiz_session;
 
-public class SessionCodeExistedException extends RuntimeException {
+import com.ptit.a2.movie_theater_managent.exception.newbase.BaseException;
+
+import static com.ptit.a2.movie_theater_managent.exception.base.StatusConstants.CONFLICT;
+
+public class SessionCodeExistedException extends BaseException {
   public SessionCodeExistedException() {
-    super("Session code already exists");
+    super(CONFLICT, "CONFLICT", "Session code already exists");
   }
 }

@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.invocation.HandlerMethodReturnValue
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -26,8 +27,14 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
     stompEndpointRegistry.addEndpoint("/websocket")
-          .setAllowedOriginPatterns("*")
-          .withSockJS();
+          //.setAllowedOriginPatterns("https://1343-58-187-92-82.ngrok-free.app/")
+          //.setAllowedOrigins("https://1343-58-187-92-82.ngrok-free.app/")
+          .setAllowedOrigins(
+                "http://localhost:8899", // Cho phép FE local
+                "https://stunning-termite-ideal.ngrok-free.app", // Domain FE ngrok
+                "https://*.ngrok-free.app" // Cho phép tất cả domain ngrok
+          )
+          .withSockJS().setWebSocketEnabled(true).setSessionCookieNeeded(false);
   }
 
   @Override
